@@ -10,5 +10,5 @@ class Goalkeeper(Player):
 player = Player()
 goalkeeper = Goalkeeper()
 
-player.play()       # Output: Player is playing on the field.
-goalkeeper.play()   # Output: Goalkeeper is guarding the goal.
+player.play()      
+goalkeeper.play()   
