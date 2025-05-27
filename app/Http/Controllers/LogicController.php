@@ -101,7 +101,7 @@ public function interest()
 
 public function view()
 {
-    $recentLoans = Loan::orderBy('created_at', 'desc')->take(5)->get();
+    $recentLoans = Loan::orderBy('created_at', 'desc')->take(15)->get();
 
     $recentRepayments = Repayment::with('loan')
         ->orderBy('created_at', 'desc')
@@ -111,18 +111,18 @@ public function view()
     $totalClients = Loan::distinct('contact')->count('contact');
 
     $outstandingRepayments = Loan::where('balance_to_pay', '>', 0)
-        ->orderBy('loan_date', 'desc')
+        ->orderBy('created_at', 'desc') // or loan_date if more appropriate
         ->get();
 
-    // Calculate the total outstanding balance for loans with balance to pay
     $totalOutstanding = Loan::where('balance_to_pay', '>', 0)->sum('balance_to_pay');
 
-    // Active loans count
     $activeLoansCount = Loan::where('status', 'active')->count();
 
-    // ✅ Defaulters from settled loans
-    $defaulters = SettledLoan::where('balance_left', '>', 0)->get();
-    $defaultersTotalOutstanding = $defaulters->sum('balance_left'); // Variable for defaulter balance
+    $defaulters = SettledLoan::where('balance_left', '>', 0)
+        ->orderBy('created_at', 'desc') // ← added sorting
+        ->get();
+
+    $defaultersTotalOutstanding = $defaulters->sum('balance_left');
 
     return view('admin.dashboard', compact(
         'recentLoans',
@@ -135,6 +135,7 @@ public function view()
         'defaultersTotalOutstanding'
     ));
 }
+
 
 
 public function repay(){
@@ -163,10 +164,19 @@ public function index(Request $request)
 
     $clients = Loan::query()
         ->when($search, function ($query, $search) {
-            $query->where('name', 'like', "%{$search}%")
+            return $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
                   ->orWhere('contact', 'like', "%{$search}%");
+            });
         })
-        ->get(); 
+        ->orderBy('created_at', 'desc')
+        ->get();
 
     return view('clients.views', compact('clients'));
-    }}
+}
+
+
+
+    }
+    
+

@@ -12,5 +12,9 @@ class InterestSetup extends Model
         'interest_rate',
         'loan_duration',
     ];
-    
+    public function interestSetup()
+{
+    return $this->belongsTo(\App\Models\InterestSetup::class);
+}
+
 }

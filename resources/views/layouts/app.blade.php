@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Loan Management System</title>
+
+  <!-- ✅ Favicon -->
+  <link rel="icon" type="image/png" href="{{ asset('images/loan.png') }}">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -17,6 +21,7 @@
     };
   </script>
 </head>
+
 <body class="bg-gray-100 font-sans antialiased">
 
   <!-- Topbar -->
@@ -39,14 +44,32 @@
 
       <!-- Dropdown -->
       <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50">
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100">Profile</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100">Settings</a>
-        <div class="border-t my-1"></div>
-        <a href="#" class="block px-4 py-2 text-red-500 hover:bg-red-100 hover:text-red-600">Logout</a>
-      </div>
-    </div>
-  </header>
+    <a href="{{ route('profile') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100">Profile</a>
+    <a href="{{ route('interest') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100">Settings</a>
+    <div class="border-t my-1"></div>
 
+    <!-- Logout Form -->
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" class="block w-full text-left px-4 py-2 text-red-500 hover:bg-red-100 hover:text-red-600">
+            Logout
+        </button>
+    </form>
+</div>
+
+    </div>
+  </header><!-- Bootstrap JS (includes Popper.js for Bootstrap components) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+
+
+  
   <div class="flex min-h-screen relative">
     <!-- Sidebar -->
     <aside id="sidebar"
@@ -67,7 +90,7 @@
             </svg>
           </button>
           <div id="dashboardDropdown" class="hidden space-y-2 px-4">
-            <a href="/" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Overview</a>
+            <a href="/dashboard/view" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Overview</a>
           </div>
         </div>
 
@@ -85,6 +108,8 @@
          <a href="/repayment" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Repay loan</a>
     <a href="{{ route('clients.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">View Clients</a>
     <a href="{{ route('settled_loans.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Settled loans</a>
+        <a href="{{ route('fine_loans.table') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">view fines</a>
+
 
         </div>
         </div>
@@ -112,8 +137,8 @@
             </svg>
           </button>
           <div id="reportsDropdown" class="hidden space-y-2 px-4">
-            <a href="reportm" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Monthly Reports</a>
-            <a href="yearly" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Yearly Reports</a>
+            <a href="{{ route('reports.generate') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Business Reports</a>
+            <a href="{{ route('stat') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Statistic Rating</a>
           </div>
         </div>
 
@@ -127,7 +152,7 @@
           </button>
           <div id="settingsDropdown" class="hidden space-y-2 px-4">
             <a href="{{ route('interest') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Interest rate Settings</a>
-                        <a href="{{ route('interest') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Define Fine</a>
+                        <a href="{{ route('loan_fines.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Define Fine</a>
 
             <a href="{{ route('profile') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Admin profile settting</a>
           </div>

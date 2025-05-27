@@ -5,20 +5,21 @@
 <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow mt-0 w-100">
     <h2 class="text-2xl font-semibold mb-4 mt-5">Log a Client Repayment</h2>
 
-    <form id="repaymentForm" method="POST" action="" class="space-y-6">
+    <form id="repaymentForm" method="POST" action="{{ route('repayments.store') }}" class="space-y-6">
         @csrf
 
         {{-- Select Client --}}
-        <div>
-            <label for="client_id" class="block text-sm font-medium text-gray-700">Select Client</label>
-            <select id="client_id" name="client_id" required
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                <option value="">-- Choose Client --</option>
-                {{-- @foreach($clients as $client)
-                    <option value="{{ $client->id }}">{{ $client->name }} - {{ $client->contact }}</option>
-                @endforeach --}}
-            </select>
-        </div>
+      <div>
+    <label for="loan_id" class="block text-sm font-medium text-gray-700">Select Client</label>
+    <select id="loan_id" name="loan_id" required
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        <option value="">-- Choose Client --</option>
+        @foreach($loans as $loan)
+            <option value="{{ $loan->id }}">{{ $loan->name }} - {{ $loan->contact }}</option>
+        @endforeach 
+    </select>
+</div>
+
 
         {{-- Amount --}}
         <div>
@@ -84,7 +85,7 @@
     const reviewBtn = document.getElementById('reviewRepaymentBtn');
 
     reviewBtn.addEventListener('click', () => {
-        const client = document.getElementById('client_id');
+        const client = document.getElementById('loan_id');
         const amount = document.getElementById('amount').value;
         const date = document.getElementById('payment_date').value;
         const note = document.getElementById('note').value;

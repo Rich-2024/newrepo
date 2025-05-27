@@ -4,7 +4,9 @@
 <div class="container mx-auto py-6 px-4 mt-5">
     <h2 class="text-2xl font-semibold mb-4">Repayment Report</h2>
 
+    <!-- Form with Month, Year, and Search Bar -->
     <form method="GET" action="{{ route('reports.repayments') }}" class="flex space-x-4 mb-6">
+        <!-- Month Selection -->
         <div>
             <label for="month" class="block text-sm font-medium">Month</label>
             <select name="month" id="month" class="form-select rounded mt-1">
@@ -15,6 +17,8 @@
                 @endfor
             </select>
         </div>
+
+        <!-- Year Selection -->
         <div>
             <label for="year" class="block text-sm font-medium">Year</label>
             <select name="year" id="year" class="form-select rounded mt-1">
@@ -25,12 +29,25 @@
                 @endfor
             </select>
         </div>
+
+        <!-- Generate Button -->
         <div class="flex items-end">
             <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
                 Generate
             </button>
         </div>
     </form>
+
+    <!-- Search Bar with Icon -->
+ <div class="mb-6">
+    <form method="GET" action="{{ route('reports.repayments') }}" class="flex items-center space-x-2">
+        <input type="text" name="search" id="search" class="form-input rounded border-gray-300 mt-1" placeholder="Search by Client Name or Loan ID" value="{{ request('search') }}">
+        <button type="submit" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-3 py-2 rounded">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+</div>
+
 
     @if($reportData)
         <h3 class="text-lg font-semibold mb-4">

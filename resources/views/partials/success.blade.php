@@ -38,11 +38,13 @@
         z-index: 9999;
         display: none;
     }
-    .success {
-        background-color: #28a745;
-        color: white;
-        display: block;
-    }
+                /* <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6"> */
+
+   .success {
+    background-color: #28a745;
+    color: white;
+    display: block;
+}
     .error {
         background-color: #dc3545;
         color: white;

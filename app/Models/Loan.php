@@ -24,4 +24,8 @@ class Loan extends Model
     {
         return $this->hasMany(Repayment::class);
     }
+       public function interestSetup()
+    {
+        return $this->belongsTo(InterestSetup::class);
+    }
 }

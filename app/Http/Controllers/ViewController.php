@@ -47,6 +47,10 @@ class ViewController extends Controller
     {
         return view('setting.profile');
     }
+    public function learn()
+    {
+        return view('partials.learn');
+    }
 }
 
 

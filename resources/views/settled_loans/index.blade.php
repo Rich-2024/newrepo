@@ -4,13 +4,7 @@
 <div class="container py-4">
     <h2 class="mb-4 text-primary fw-bold border-bottom pb-2">📘 Settled Loans</h2>
 
-    <!-- ✅ Success Alert -->
-    {{-- @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif --}}
+
     @include('partials.success')
 
     <!-- 🔍 Search Form -->
@@ -58,9 +52,10 @@
                                 @csrf
                                 @method('DELETE')
                             </form>
-                            <button class="btn btn-sm btn-danger" onclick="confirmDelete({{ $loan->id }})">
-                                🗑️ Delete
-                            </button>
+                          <button class="btn btn-sm btn-danger" onclick="confirmDelete({{ $loan->id }})">
+    🗑️ <span style="color: red;">Delete</span>
+</button>
+
                         </td>
                     </tr>
                 @empty

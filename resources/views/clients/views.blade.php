@@ -28,6 +28,11 @@
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Name</th>
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Contact</th>
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Loan Issued</th>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Interest Rate</th>
+                  {{-- <th class="px-4 py-3 text-left font-semibold text-gray-600">Loan Duration</th> --}}
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Loan Issued Date</th>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Loan End Date</th>
+
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Daily Repayment</th>
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Total to Pay</th>
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Repayment Made</th>
@@ -45,6 +50,12 @@
                         <td class="px-4 py-3 text-gray-800">{{ $client->name }}</td>
                         <td class="px-4 py-3 text-gray-800">{{ $client->contact }}</td>
                         <td class="px-4 py-3 text-gray-800">UGX {{ number_format($client->amount) }}</td>
+                     <td class="px-4 py-3 text-gray-800"> {{ number_format($client->interest_rate) }}%</td>
+                     {{-- <td class="px-4 py-3 text-gray-800"> {{ number_format($client->loan_duration) }} days</td> --}}
+                        <td class="px-4 py-3 text-gray-800">{{ $client->loan_date }}</td>
+                        <td class="px-4 py-3 text-gray-800">{{ $client->End_date }}</td>
+
+
                         <td class="px-4 py-3 text-gray-800">UGX {{ number_format($client->daily_repayment) }}</td>
                         <td class="px-4 py-3 text-gray-800">UGX {{ number_format($client->total_amount) }}</td>
                         <td class="px-4 py-3 text-gray-800">UGX {{ number_format($repaymentMade) }}</td>
@@ -120,7 +131,7 @@
 <div id="editModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96 max-w-full">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Edit Client Details</h3>
-        <form id="editForm" method="POST" action="{{ route('clients.update') }}">
+        <form id="editForm" method="POST" action="{{ route('clients.update', ['id' => $client]) }}">
             @csrf
             @method('PUT')
             <input type="hidden" name="loan_id" id="loan_id" />
