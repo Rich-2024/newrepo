@@ -16,7 +16,7 @@ class ProcessExpiredLoans extends Command
     {
         $this->info('⏳ Checking for expired loans...');
 
-        // Step 1: Mark expired loans as inactive
+        // Mark expired loans as inactive
         $expiredLoans = Loan::where('status', 'active')
             ->where('end_date', '<', Carbon::now())
             ->get();
@@ -28,7 +28,7 @@ class ProcessExpiredLoans extends Command
 
         $this->info("✅ Updated {$expiredLoans->count()} expired loan(s) to inactive.");
 
-        // Step 2: Move inactive loans to SettledLoan and delete from Loan
+        //  Move inactive loans to SettledLoan and delete from Loan
         $inactiveLoans = Loan::where('status', 'inactive')->get();
         foreach ($inactiveLoans as $loan) {
             SettledLoan::create([
@@ -44,7 +44,7 @@ class ProcessExpiredLoans extends Command
                 'updated_at'       => now(),
             ]);
 
-            // $loan->delete(); // Remove the loan from active loans
+            // $loan->delete(); 
         }
 
         $this->info("✅ Moved {$inactiveLoans->count()} inactive loan(s) to SettledLoan table.");

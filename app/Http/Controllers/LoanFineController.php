@@ -103,7 +103,6 @@ public function fineLoansTable()
     $minStart = $loans->min('created_at');
     $maxEnd = Carbon::parse($endDate)->startOfDay();
 
-    // Calculate the difference in days, and round it to a whole number
     $fineDuration = floor(Carbon::parse($minStart)->diffInDays($maxEnd));
 
     return view('partials.fine_table', compact('loans', 'rate', 'endDate', 'fineDuration'));
@@ -111,7 +110,6 @@ public function fineLoansTable()
 
 public function settle(Request $request)
 {
-    // Validate request data
     $request->validate([
         'loan_id'      => 'required|exists:loans,id',
         'amount'       => 'required|numeric|min:1',
@@ -128,22 +126,17 @@ public function settle(Request $request)
             'note'         => $request->note,
         ]);
     } catch (\Exception $e) {
-        // Log and return error if repayment creation fails
         logger()->error('Repayment creation failed: ' . $e->getMessage());
         return back()->with('error', 'Repayment creation failed.');
     }
 
-    // Find the corresponding settled loan record by loan_id (assuming id matches)
     $settledLoan = SettledLoan::where('id', $request->loan_id)->first();
 
     if ($settledLoan) {
-        // Sum all repayments made for this loan_id
         $totalRepaid = Repayment::where('loan_id', $request->loan_id)->sum('amount');
 
-        // Update balance left
         $settledLoan->balance_left = max(0, round($settledLoan->total_amount - $totalRepaid, 2));
 
-        // Store total repayment made so far
         $settledLoan->repayment_made = $totalRepaid;
 
         // Store the latest repayment date

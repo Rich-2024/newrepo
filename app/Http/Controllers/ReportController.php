@@ -23,18 +23,16 @@ public function defaultersReport()
 
 public function repaymentHistory(Request $request)
 {
-    // Get the search query
     $search = $request->input('search');
   $month = (int) $request->input('month', now()->month);
 $year = (int) $request->input('year', now()->year);
 ;
 
-    // Fetch repayments filtered by search if provided
+    // Fetch repayments filtered by search idf provided
     $repaymentsQuery = Repayment::with('loan')
         ->whereYear('payment_date', $year)
         ->whereMonth('payment_date', $month);
 
-    // Apply search if it's provided
     if ($search) {
         $repaymentsQuery->where(function($query) use ($search) {
             $query->whereHas('loan', function($q) use ($search) {
@@ -44,15 +42,12 @@ $year = (int) $request->input('year', now()->year);
         });
     }
 
-    // Get filtered repayments
     $repayments = $repaymentsQuery->orderByDesc('payment_date')->get();
 
-    // Calculate totals
     $totalRepayments = $repayments->sum('amount');
     $totalLoans = Loan::all()->sum('amount');
     $balanceDue = SettledLoan::where('balance_left', '>', 0)->sum('balance_left');
 
-    // Prepare data for the view
     $reportData = [
         'repayments' => $repayments,
         'total_loans' => $totalLoans,
@@ -60,10 +55,8 @@ $year = (int) $request->input('year', now()->year);
         'balance_due' => $balanceDue,
     ];
 
-    // Return the view with the report data
     return view('clients.reports', compact('reportData', 'month', 'year', 'search'));
 }
-   // Show the report generation form
    public function showForm()
     {
         return view('partials.report');
@@ -72,10 +65,8 @@ $year = (int) $request->input('year', now()->year);
     // Handle the report generation
     public function generate(Request $request)
     {
-        // Validate report type
         $this->validateReportType($request);
 
-        // Fetch loan data (adjust query if necessary)
         $loans = Loan::all();
 
         // Check if no loans are available

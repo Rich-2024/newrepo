@@ -9,12 +9,13 @@ class SettledLoanController extends Controller
 
 public function index(Request $request)
 {
-    // Retrieve and sanitize filter inputs
+    // Retrieve and sanitize filter input
     $month  = $request->input('month');
     $year   = $request->input('year');
     $client = trim($request->input('client'));
 
     // Start the query
+
     $query = SettledLoan::query();
 
     // Filter by month if valid (1-12)
@@ -22,7 +23,7 @@ public function index(Request $request)
         $query->whereMonth('settled_at', intval($month));
     }
 
-    // Filter by year if valid (reasonable range)
+    // Filter by year if
     if (!empty($year) && is_numeric($year) && $year >= 2000 && $year <= date('Y') + 1) {
         $query->whereYear('settled_at', intval($year));
     }

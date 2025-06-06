@@ -11,7 +11,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div class="bg-white p-6 rounded-lg shadow">
             <h2 class="text-sm font-medium text-gray-500">Total Clients</h2>
-            <p class="text-2xl font-bold text-blue-600 mt-2">{{ $totalClients + $defaulters->count()  }}</p>
+            <p class="text-2xl font-bold text-blue-600 mt-2">{{ $activeLoansCount + $defaulters->count()  }}</p>
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow">
@@ -26,6 +26,7 @@
 
        <div class="bg-white p-6 rounded-lg shadow">
     <h2 class="text-sm font-medium text-gray-500">Defaulters & balance left</h2>
+    
     <p class="text-2xl font-bold text-red-600 mt-2">{{ $defaulters->count() }}</p>
     <p class="mt-2">UGX {{ number_format($defaultersTotalOutstanding, 0) }}</p>
 </div>

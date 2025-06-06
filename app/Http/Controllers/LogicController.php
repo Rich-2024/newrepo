@@ -111,7 +111,7 @@ public function view()
     $totalClients = Loan::distinct('contact')->count('contact');
 
     $outstandingRepayments = Loan::where('balance_to_pay', '>', 0)
-        ->orderBy('created_at', 'desc') // or loan_date if more appropriate
+        ->orderBy('created_at', 'desc')
         ->get();
 
     $totalOutstanding = Loan::where('balance_to_pay', '>', 0)->sum('balance_to_pay');
@@ -119,7 +119,7 @@ public function view()
     $activeLoansCount = Loan::where('status', 'active')->count();
 
     $defaulters = SettledLoan::where('balance_left', '>', 0)
-        ->orderBy('created_at', 'desc') // ← added sorting
+        ->orderBy('created_at', 'desc')
         ->get();
 
     $defaultersTotalOutstanding = $defaulters->sum('balance_left');
