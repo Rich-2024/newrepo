@@ -31,6 +31,8 @@ class ProcessExpiredLoans extends Command
         //  Move inactive loans to SettledLoan and delete from Loan
         $inactiveLoans = Loan::where('status', 'inactive')->get();
         foreach ($inactiveLoans as $loan) {
+                \Log::info('Loan user_id: ' . var_export($loan->user_id, true));
+
             SettledLoan::create([
                 'name'             => $loan->name,
                 'contact'          => $loan->contact,
@@ -40,11 +42,13 @@ class ProcessExpiredLoans extends Command
                  'total_amount'     => $loan->total_amount,
                 'daily_repayment'  => $loan->daily_repayment,
                 'balance_left'     => $loan->balance_to_pay,
+                 'user_id'         => $loan->user_id,
+
                 'created_at'       => now(),
                 'updated_at'       => now(),
             ]);
 
-            // $loan->delete(); 
+            // $loan->delete();
         }
 
         $this->info("✅ Moved {$inactiveLoans->count()} inactive loan(s) to SettledLoan table.");

@@ -3,57 +3,53 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-   use App\Models\SettledLoan;
+use App\Models\SettledLoan;
+use Illuminate\Support\Facades\Auth;
+
 class SettledLoanController extends Controller
 {
+    public function index(Request $request)
+    {
+        $userId = Auth::id(); // 👈 Ensure we're filtering by logged-in user
 
-public function index(Request $request)
-{
-    // Retrieve and sanitize filter input
-    $month  = $request->input('month');
-    $year   = $request->input('year');
-    $client = trim($request->input('client'));
+        $month  = $request->input('month');
+        $year   = $request->input('year');
+        $client = trim($request->input('client'));
 
-    // Start the query
+        $query = SettledLoan::where('user_id', $userId); 
 
-    $query = SettledLoan::query();
+        if (!empty($month) && is_numeric($month) && $month >= 1 && $month <= 12) {
+            $query->whereMonth('settled_at', intval($month));
+        }
 
-    // Filter by month if valid (1-12)
-    if (!empty($month) && is_numeric($month) && $month >= 1 && $month <= 12) {
-        $query->whereMonth('settled_at', intval($month));
+        if (!empty($year) && is_numeric($year) && $year >= 2000 && $year <= date('Y') + 1) {
+            $query->whereYear('settled_at', intval($year));
+        }
+
+        if (!empty($client)) {
+            $query->where('name', 'like', '%' . $client . '%');
+        }
+
+        $settledLoans = $query->orderBy('settled_at', 'desc')->paginate(10);
+
+        $settledLoans->appends([
+            'month'  => $month,
+            'year'   => $year,
+            'client' => $client,
+        ]);
+
+        return view('settled_loans.index', compact('settledLoans', 'month', 'year', 'client'));
     }
 
-    // Filter by year if
-    if (!empty($year) && is_numeric($year) && $year >= 2000 && $year <= date('Y') + 1) {
-        $query->whereYear('settled_at', intval($year));
+    public function destroy($id)
+    {
+        $userId = Auth::id();
+
+        $loan = SettledLoan::where('id', $id)->where('user_id', $userId)->firstOrFail(); // 👈 Only delete if it belongs to user
+
+        $clientName = $loan->name;
+        $loan->delete();
+
+        return redirect()->back()->with('success', "Settled loan for {$clientName} was deleted successfully.");
     }
-
-    // Filter by client name (case-insensitive, partial match)
-    if (!empty($client)) {
-        $query->where('name', 'like', '%' . $client . '%');
-    }
-
-    // Order and paginate the results
-    $settledLoans = $query->orderBy('settled_at', 'desc')->paginate(10);
-
-    // Maintain query params in pagination links
-    $settledLoans->appends([
-        'month'  => $month,
-        'year'   => $year,
-        'client' => $client,
-    ]);
-
-    return view('settled_loans.index', compact('settledLoans', 'month', 'year', 'client'));
-}
-
-public function destroy($id)
-{
-    $loan = SettledLoan::findOrFail($id);
-    $clientName = $loan->name; 
-    $loan->delete();
-
-    return redirect()->back()->with('success', "Settled loan for {$clientName} was deleted successfully.");
-}
-
-
 }

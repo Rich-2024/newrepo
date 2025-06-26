@@ -10,7 +10,7 @@
         <!-- Search Form -->
         <form method="GET" action="{{ route('clients.index') }}" class="w-full sm:w-auto">
             <div class="relative">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search clients..." 
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search clients..."
                     class="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm sm:text-base">
                 <button type="submit" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-indigo-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -62,12 +62,18 @@
                         <td class="px-4 py-3 text-gray-800">UGX {{ number_format($client->balance_to_pay) }}</td>
                         <td class="px-4 py-3 text-gray-800">{{ $client->status }}</td>
                         <td class="px-4 py-3 space-y-1 sm:space-y-0 sm:space-x-2 flex flex-col sm:flex-row">
-                            <button type="button" onclick="openEditModal('{{ $client->id }}', '{{ $client->name }}', '{{ $client->contact }}')" 
-                                class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600">Edit</button>                            
+                            <button type="button" onclick="openEditModal('{{ $client->id }}', '{{ $client->name }}', '{{ $client->contact }}')"
+                                class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600">Edit</button>
 
-                            <button 
-                                onclick="openRepayModal('{{ $client->id }}', '{{ $client->name }}')" 
+                            <button
+                                onclick="openRepayModal('{{ $client->id }}', '{{ $client->name }}')"
                                 class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600">Repay</button>
+                        </td>
+                        <td>
+                                                     <button
+                                class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600"><a href="{{ route('loans.printIssuance', $client->id) }}" target="_blank" class="text-green-600 hover:underline">
+    Print Issuance
+</a>
                         </td>
                     </tr>
                 @empty
@@ -162,7 +168,7 @@
         document.getElementById('loan_id').value = clientId;
         document.getElementById('client_name').value = clientName;
         document.getElementById('client_phone').value = clientContact;
-        
+
         const modal = document.getElementById('editModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');

@@ -20,12 +20,10 @@ class CreateLoansTable extends Migration
             // Computed columns (Laravel doesn't support virtual/generated columns natively)
             // So you'll calculate total_amount and daily_repayment in the model or database triggers
             // OR if your DB supports it (e.g. MySQL 5.7+), you can run a raw statement manually later
+$table->foreignId('user_id')->constrained()->onDelete('cascade');
 
-            $table->foreign(['interest_rate', 'loan_duration'])
-                  ->references(['interest_rate', 'loan_duration'])
-                  ->on('interest_setups')
-                  ->onUpdate('cascade')
-                  ->onDelete('set null');
+
+                
         });
     }
 

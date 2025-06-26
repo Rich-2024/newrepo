@@ -80,6 +80,7 @@
                         <th class="px-4 py-2">Amount Paid</th>
                         <th class="px-4 py-2">Date</th>
                         <th class="px-4 py-2">Note</th>
+                          <th class="px-4 py-2">Action</th>
                     </tr>
                 </thead>
                 <tbody class="text-sm text-gray-700">
@@ -93,6 +94,9 @@
                             <td class="px-4 py-2">UGX {{ number_format($repayment->amount) }}</td>
                             <td class="px-4 py-2">{{ \Carbon\Carbon::parse($repayment->payment_date)->format('d M Y') }}</td>
                             <td class="px-4 py-2">{{ $repayment->note ?? '-' }}</td>
+                            <td class="px-4 py-2"><a href="{{ route('repayments.print', $repayment->id) }}" class="text-blue-500 hover:underline">Print</a>
+</td>
+
                         </tr>
                     @empty
                         <tr>

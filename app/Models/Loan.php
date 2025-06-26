@@ -28,4 +28,13 @@ class Loan extends Model
     {
         return $this->belongsTo(InterestSetup::class);
     }
+    public function attachments()
+{
+    return $this->hasMany(Attachment::class);
+}
+public function user()
+{
+    return $this->belongsTo(User::class);
+}
+
 }

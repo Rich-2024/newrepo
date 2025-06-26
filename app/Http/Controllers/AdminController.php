@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Loan;
     use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use App\Models\User;
@@ -57,7 +58,6 @@ public function update(Request $request)
         return redirect()->back()->with('error', 'You must be logged in to update your profile.');
     }
 
-    // Proceed as before
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email,' . $user->id,
@@ -86,7 +86,7 @@ public function update(Request $request)
 
     public function showLoginForm()
     {
-        return view('admin.login'); 
+        return view('admin.login');
     }
 
     public function login(Request $request)
@@ -100,7 +100,7 @@ public function update(Request $request)
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard/view')->with('success','login successful'); 
+            return redirect()->intended('/dashboard/view')->with('success','login successful');
         }
 
         return back()->withErrors([
@@ -116,6 +116,22 @@ public function update(Request $request)
 
         return redirect('/')->with('success',"You're loggedout ");
     }
+   public function clientsIndex(Request $request)
+{
+    $search = $request->input('search');
+    $userId = Auth::id();
+
+    $loans = Loan::query()
+        ->where('user_id', $userId)
+        ->when($search, function ($query, $search) {
+            $query->where('name', 'like', "%$search%");
+        })
+        ->orderByDesc('created_at')
+        ->paginate(10);
+
+    return view('clients.clients_index', compact('loans'));
+}
+
 }
 
 

@@ -18,6 +18,7 @@ class SettledLoan extends Model
         'total_amount',
         'daily_repayment',
         'balance_left',
+          'user_id',
         'created_at',
         'updated_at',
     ];

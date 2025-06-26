@@ -69,13 +69,13 @@
 
 
 
-  
+
   <div class="flex min-h-screen relative">
     <!-- Sidebar -->
     <aside id="sidebar"
       class="fixed inset-y-0 left-0 w-64 bg-white shadow-md transform -translate-x-full md:translate-x-0 md:relative md:flex transition-transform duration-300 z-40">
       <nav class="mt-4 space-y-2 px-4">
-        
+
         <!-- Admin System Label -->
         <div class="px-4 py-2 mb-4 mt-12 text-white text-center bg-blue-600 rounded-lg font-bold text-lg">
           Admin System
@@ -90,8 +90,11 @@
             </svg>
           </button>
           <div id="dashboardDropdown" class="hidden space-y-2 px-4">
-            <a href="/dashboard/view" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Overview</a>
-          </div>
+
+         <a href="/dashboard/view" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Overview</a>
+            <a href="{{ route('loans.clients.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">View clients</a>
+
+        </div>
         </div>
 
         <!-- Clients Dropdown (Action) -->
@@ -103,10 +106,10 @@
             </svg>
           </button>
           <div id="clientsDropdown" class="hidden space-y-2 px-4">
-           
+
          <a href="{{ route('create') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Create loan</a>
          <a href="/repayment" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Repay loan</a>
-    <a href="{{ route('clients.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">View Clients</a>
+    <a href="{{ route('clients.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Manage Loans</a>
     <a href="{{ route('settled_loans.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Settled loans</a>
         <a href="{{ route('fine_loans.table') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">view fines</a>
 

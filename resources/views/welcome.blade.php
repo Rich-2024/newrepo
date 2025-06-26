@@ -57,7 +57,7 @@
           Unlock your financial potential with our comprehensive loan Tracker solutions. We provide personalized financial tailored system to your needs and accessible online Everywhere you go .
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
-          <<a href="{{ route('login') }}" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition duration-200">
+          <<a href="{{ route('register') }}" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition duration-200">
             Get Started
           </a>
           <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
@@ -176,10 +176,10 @@
     <section class="bg-white/95 py-24 px-4">
       <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div>
-             <h2 class="text-3xl font-bold text-gray-900 mb-6">Ready to Get Started with Us?</h2> 
+             <h2 class="text-3xl font-bold text-gray-900 mb-6">Ready to Get Started with Us?</h2>
       <p class="text-lg text-gray-600 mb-8">
         Speak with our one of our technical teams today and take the first step toward loan management tailored to your needs.
-      </p> 
+      </p>
           <div class="space-y-4">
             <div class="flex items-center">
               <span class="text-blue-600 mr-3">📞</span>

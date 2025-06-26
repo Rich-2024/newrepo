@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 use App\Models\InterestSetup;
@@ -11,34 +12,35 @@ use App\Models\SettledLoan;
 
 class LogicController extends Controller
 {
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'business_name' => 'required|string|max:255',
-            'business_size' => 'required|in:Small,Medium,Large',
-            'interest_rate' => 'required|numeric|min:0|max:100',
-            'loan_duration' => 'required|integer|min:1',
-        ]);
-    
-        // Check if the combination already exists
-        $exists = InterestSetup::where('interest_rate', $validatedData['interest_rate'])
-            ->where('loan_duration', $validatedData['loan_duration'])
-            ->exists();
-    
-        if ($exists) {
-            return redirect()->back()
-                ->withErrors(['This interest rate and loan duration combination already exists.'])
-                ->withInput();
-        }
-    
-        // Save the new record
-        InterestSetup::create($validatedData);
-    
-        // Redirect with success (no withInput here)
+  public function store(Request $request)
+{
+    $validatedData = $request->validate([
+        'business_name' => 'required|string|max:255',
+        'business_size' => 'required|in:Small,Medium,Large',
+        'interest_rate' => 'required|numeric|min:0|max:100',
+        'loan_duration' => 'required|integer|min:1',
+    ]);
+
+    // Automatically set user_id based on authenticated user
+    $validatedData['user_id'] = auth()->id();
+
+    // Check if the combination already exists for this user
+    $exists = InterestSetup::where('user_id', $validatedData['user_id'])
+        ->where('interest_rate', $validatedData['interest_rate'])
+        ->where('loan_duration', $validatedData['loan_duration'])
+        ->exists();
+
+    if ($exists) {
         return redirect()->back()
-            ->with('success', 'Interest setup has been saved successfully!');
+            ->withErrors(['This interest rate and loan duration combination already exists.'])
+            ->withInput();
     }
-    
+
+    InterestSetup::create($validatedData);
+
+    return redirect()->route('interest.index')->with('success', 'Interest setup created successfully.');
+}
+
 
 public function showLoanHistory()
 {
@@ -65,8 +67,8 @@ public function showLoanHistory()
 }
 public function interest()
 {
-    // Fetch the recent setups from the database (adjust as per your database structure)
-    $recentSetups = InterestSetup::latest()->paginate(0); // Or use any query that fits your data
+    $userId =auth::id();
+    $recentSetups = InterestSetup::where('user_id',$userId)->latest()->paginate(10);
 
     // Pass the $recentSetups variable to the view
     return view('setting.interest', compact('recentSetups'));
@@ -99,26 +101,84 @@ public function interest()
 // }
 
 
+// public function view()
+// {
+//     $recentLoans = Loan::orderBy('created_at', 'desc')->take(15)->get();
+
+//     $recentRepayments = Repayment::with('loan')
+//         ->orderBy('created_at', 'desc')
+//         ->take(5)
+//         ->get();
+
+//     $totalClients = Loan::distinct('contact')->count('contact');
+
+//     $outstandingRepayments = Loan::where('balance_to_pay', '>', 0)
+//         ->orderBy('created_at', 'desc')
+//         ->get();
+
+//     $totalOutstanding = Loan::where('balance_to_pay', '>', 0)->sum('balance_to_pay');
+
+//     $activeLoansCount = Loan::where('status', 'active')->count();
+
+//     $defaulters = SettledLoan::where('balance_left', '>', 0)
+//         ->orderBy('created_at', 'desc')
+//         ->get();
+
+//     $defaultersTotalOutstanding = $defaulters->sum('balance_left');
+
+//     return view('admin.dashboard', compact(
+//         'recentLoans',
+//         'recentRepayments',
+//         'totalClients',
+//         'outstandingRepayments',
+//         'totalOutstanding',
+//         'activeLoansCount',
+//         'defaulters',
+//         'defaultersTotalOutstanding'
+//     ));
+// }
+
+
+
 public function view()
 {
-    $recentLoans = Loan::orderBy('created_at', 'desc')->take(15)->get();
+    $userId = Auth::id();
 
-    $recentRepayments = Repayment::with('loan')
+    // Recent loans for this user
+    $recentLoans = Loan::where('user_id', $userId)
+        ->orderBy('created_at', 'desc')
+        ->take(15)
+        ->get();
+
+    // Recent repayments for this user's loans
+    $recentRepayments = Repayment::whereHas('loan', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })
+        ->with('loan')
         ->orderBy('created_at', 'desc')
         ->take(5)
         ->get();
 
-    $totalClients = Loan::distinct('contact')->count('contact');
+    $totalClients = Loan::where('user_id', $userId)
+        ->distinct('contact')
+        ->count('contact');
 
-    $outstandingRepayments = Loan::where('balance_to_pay', '>', 0)
+    $outstandingRepayments = Loan::where('user_id', $userId)
+        ->where('balance_to_pay', '>', 0)
         ->orderBy('created_at', 'desc')
         ->get();
 
-    $totalOutstanding = Loan::where('balance_to_pay', '>', 0)->sum('balance_to_pay');
+    $totalOutstanding = Loan::where('user_id', $userId)
+        ->where('balance_to_pay', '>', 0)
+        ->sum('balance_to_pay');
 
-    $activeLoansCount = Loan::where('status', 'active')->count();
+    $activeLoansCount = Loan::where('user_id', $userId)
+        ->where('status', 'active')
+        ->count();
 
-    $defaulters = SettledLoan::where('balance_left', '>', 0)
+    // Defaulters
+    $defaulters = SettledLoan::where('user_id', $userId)
+        ->where('balance_left', '>', 0)
         ->orderBy('created_at', 'desc')
         ->get();
 
@@ -136,27 +196,32 @@ public function view()
     ));
 }
 
-
-
 public function repay(){
-    
+
 }
 //repaymentform
 public function showRepaymentForm()
 {
-    $loans = Loan::all(); // ✅ More accurate than $clients
+    $userId = Auth::id();
+
+    // Only loans for the logged-in user
+    $loans = Loan::where('user_id', $userId)->get();
+
     return view('clients.clientRep', compact('loans'));
 }
 
-//all client
 public function show()
 {
-    $clients = Loan::all();
-    $reps = Repayment::all();
- 
+    $userId = Auth::id();
+
+    $clients = Loan::where('user_id', $userId)->get();
+
+    $reps = Repayment::whereHas('loan', function ($query) use ($userId) {
+        $query->where('user_id', $userId);
+    })->get();
+
     return view('clients.views', compact('clients', 'reps'));
 }
-
 
 public function index(Request $request)
 {
@@ -178,5 +243,5 @@ public function index(Request $request)
 
 
     }
-    
+
 

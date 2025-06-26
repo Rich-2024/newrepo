@@ -1,24 +1,23 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Repayment extends Model
+class Attachment extends Model
 {
     use HasFactory;
 
-    // Fillable properties
     protected $fillable = [
-        'loan_id', 
-        'amount',
-        'payment_date',
-        'note',
+        'loan_id',
+        'file_name',
+        'file_path',
     ];
 
-    // Define the relationship between repayment and loan
     public function loan()
     {
         return $this->belongsTo(Loan::class);
     }
 }
+
