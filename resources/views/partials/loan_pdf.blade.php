@@ -54,9 +54,12 @@
                 <th>Name</th>
                 <th>Contact</th>
                 <th>Loan Amount</th>
-                <th>Balance Left</th>
-                <th>Loan Date</th>
-                <th>Status</th>
+                <th>Repayment Made</th>
+                <th>Balance left</th>
+                <th>Loan Issuance Date</th>
+                <th>Loan Settled Date</th>
+                    <th>Loan Status</th>
+
             </tr>
         </thead>
         <tbody>
@@ -66,8 +69,12 @@
                     <td>{{ $loan->name }}</td>
                     <td>{{ $loan->contact }}</td>
                     <td>{{ number_format($loan->amount, 2) }}</td>
-                    <td>Ugx{{ number_format($loan->balance_to_pay, 2) }}</td>
+                    <td>Ugx{{ number_format($loan->repayment_made, 2) }}</td>
+
+                    <td>Ugx{{ number_format($loan->balance_left, 2) }}</td>
                     <td>{{ \Carbon\Carbon::parse($loan->loan_date)->format('m/d/Y') }}</td>
+                <td>{{ \Carbon\Carbon::parse($loan->created_at)->format('m/d/Y') }}</td>
+
                     <td>{{ ucfirst($loan->status) }}</td>
                 </tr>
             @empty

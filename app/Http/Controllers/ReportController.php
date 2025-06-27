@@ -79,7 +79,7 @@ class ReportController extends Controller
         $this->validateReportType($request);
 
         // Only fetch loans for this user
-        $loans = Loan::where('user_id', $userId)->get();
+        $loans = SettledLoan::where('user_id', $userId)->get();
 
         if ($loans->isEmpty()) {
             return back()->with('error', 'No loan records available to generate the report.');
@@ -112,7 +112,7 @@ class ReportController extends Controller
         return response()->stream(function () use ($loans) {
             $handle = fopen('php://output', 'w');
             // Add the header row
-            fputcsv($handle, ['ID', 'Name', 'Contact', 'Loan Amount', 'Balance Left', 'Loan Date', 'Status']);
+            fputcsv($handle, ['ID', 'Name', 'Contact', 'Loan Amount', 'Repayment made','Balance Left', 'Loan Date','Settled Date','Status']);
 
             // Add loan data rows
             foreach ($loans as $loan) {
@@ -121,9 +121,14 @@ class ReportController extends Controller
                     $loan->name,
                     $loan->contact,
                     $loan->amount,
-                    $loan->balance_to_pay,
+                      $loan->repayment_made,
+                    $loan->balance_left,
                     $loan->loan_date,
-                    $loan->status
+                    $loan->created_at,
+                   $loan->status
+
+
+
                 ]);
             }
 

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 use App\Models\Loan;
+use App\Models\User;
 use App\Models\InterestSetup;
 use App\Models\SettledLoan;
 use Carbon\Carbon;
@@ -21,6 +22,7 @@ public function create(Request $request)
         'clients.*.amount'    => 'required|numeric|min:1000',
         'clients.*.loan_date' => 'required|date',
     ]);
+        $userId = Auth::id();
 
     $interest = InterestSetup::latest()->first();
 
@@ -40,7 +42,7 @@ public function create(Request $request)
 
         $existingClient = Loan::where('contact', $clientData['contact'])->first();
 
-        if ($existingClient) {
+        if ($existingClient->with('user_id',    $userId )) {
             // Add error for duplicate client contact
             $errors[] = "Client with contact {$clientData['contact']} already exists: {$existingClient->name}";
             continue;
@@ -119,7 +121,7 @@ private function moveInactiveLoansToSettled()
         ]);
 
         // Optionally delete or mark the loan as settled in the original loans table
-        // $loan->delete();
+     $loan->delete();
     }
 }
 

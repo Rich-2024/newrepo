@@ -38,7 +38,7 @@ class LogicController extends Controller
 
     InterestSetup::create($validatedData);
 
-    return redirect()->route('interest.index')->with('success', 'Interest setup created successfully.');
+    return redirect()->back()->with('success', 'Interest setup created successfully.');
 }
 
 

@@ -10,11 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AttachmentController extends Controller
 {
-    // Show upload form
     public function create($loanId)
     {
         $loan = Loan::where('id', $loanId)
-            ->where('user_id', Auth::id()) 
+            ->where('user_id', Auth::id())
             ->firstOrFail();
 
         return view('attachments.upload', compact('loan'));
@@ -28,7 +27,7 @@ class AttachmentController extends Controller
         ]);
 
         $loan = Loan::where('id', $loanId)
-            ->where('user_id', Auth::id()) // ✅ Restrict access
+            ->where('user_id', Auth::id())
             ->firstOrFail();
 
         $file = $request->file('attachment');

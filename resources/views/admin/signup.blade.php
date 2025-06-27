@@ -44,7 +44,7 @@
         @csrf
 
         <div>
-          <label for="name" class="block text-gray-700 text-sm font-medium mb-2">Name</label>
+          <label for="name" class="block text-gray-700 text-sm font-medium mb-2">Business Name</label>
           <input
             type="text"
             id="name"
@@ -119,7 +119,7 @@
 
         <!-- Admin Name -->
         <div>
-          <label for="admin_name" class="block text-gray-700 text-sm font-medium mb-2">Admin Name</label>
+          <label for="admin_name" class="block text-gray-700 text-sm font-medium mb-2">Yourc Name</label>
           <input
             type="text"
             id="admin_name"

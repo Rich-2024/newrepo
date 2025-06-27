@@ -12,14 +12,34 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\LoanSmsController;
+use App\Http\Controllers\OtpController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OtpVerificationController;
+use App\Http\Controllers\LoanInquiryController;
 // Public routes (like login, register, homepage)
 Route::get('/', [AdminController::class,  'welcome']);
 Route::get('/login', [AdminController::class,  'showLoginForm'])->name('login');
 Route::post('/login', [AdminController::class,  'login']);
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
-Route::get('password/reset', [AdminController::class, 'showLinkRequestForm']) ->name('password.request');
 
+// Route::get('password/reset', [AdminController::class, 'showLinkRequestForm']) ->name('password.request');
+
+Route::get('/send-bulk-sms', [LoanSmsController::class, 'showForm']);
+// Show forgot password form
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+Route::post('/send-bulk-sms', [LoanSmsController::class, 'send']);
+// Handle form submission and send reset email
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+
+// Show reset form
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+
+// Handle reset form submission
+Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 // Protect all other routes with auth middleware
 Route::middleware('auth')->group(function () {
 
@@ -60,6 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/loans/{loanId}/attachments', [AttachmentController::class, 'index'])->name('attachments.view');
     Route::get('/loans/{loanId}/attachments/upload', [AttachmentController::class, 'create'])->name('attachments.upload');
     Route::post('/loans/{loanId}/attachments', [AttachmentController::class, 'store'])->name('attachments.store');
+Route::post('/profile/upload-picture', [AdminController::class, 'uploadPicture'])->name('profile.uploadPicture');
 
     // Other protected POST/PUT routes
     Route::post('/interest',[ViewController::class, 'month'])->name('admin.loans.store');
@@ -107,8 +128,8 @@ Route::middleware('auth')->group(function () {
 // Route::get('/fine-loans/table', [LoanFineController::class, 'fineLoansTable'])->name('fine_loans.table');
 // Route::get('/login', [AdminController::class,  'showLoginForm'])->name('login');
  Route::get('/FinanceHubTracker/learn', [ViewController::class, 'learn'])->name('learn');
-// Route::get('/repayments/{id}/print', [RepaymentController::class, 'print'])->name('repayments.print');
-// Route::get('/loans/{id}/print-issuance', [RepaymentController::class, 'printIssuance'])->name('loans.printIssuance');
+ Route::get('/repayments/{id}/print', [RepaymentController::class, 'print'])->name('repayments.print');
+ Route::get('/loans/{id}/print-issuance', [RepaymentController::class, 'printIssuance'])->name('loans.printIssuance');
  Route::get('/loans/clients', [AdminController::class, 'clientsIndex'])->name('loans.clients.index');
 // Route::get('/loans/{loanId}/attachments', [AttachmentController::class, 'index'])->name('attachments.view');
 // Route::get('/loans/{loanId}/attachments/upload', [AttachmentController::class, 'create'])->name('attachments.upload');
@@ -136,6 +157,19 @@ Route::middleware('auth')->group(function () {
 
 
 
+// Route::get('/otp-request', [OtpController::class, 'showRequestForm'])->name('otp.request.form');
+// Route::post('/otp-send', [OtpController::class, 'sendOtp'])->name('otp.send');
+// Route::get('/otp-verify', [OtpController::class, 'showVerifyForm'])->name('otp.verify.form');
+// Route::post('/otp-verify', [OtpController::class, 'verifyOtp'])->name('otp.verify');
 
 
+// Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+// Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/otp-verify', [OtpVerificationController::class, 'showVerifyForm'])->name('otp.verify.form');
+Route::post('/otp-verify', [OtpVerificationController::class, 'verifyOtp'])->name('otp.verify');
+Route::post('/resend-otp', [OtpVerificationController::class, 'resendOtp'])->name('otp.resend');
+
+
+Route::get('/loan-inquiry', [LoanInquiryController::class, 'showForm'])->name('loan.inquiry');
+Route::post('/loan-inquiry', [LoanInquiryController::class, 'submit'])->name('loan.inquiry.submit');

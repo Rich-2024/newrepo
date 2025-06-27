@@ -37,8 +37,8 @@
         <a href="#" class="text-gray-700 hover:text-blue-600">Services</a>
         <a href="#" class="text-gray-700 hover:text-blue-600">About</a>
         <a href="#" class="text-gray-700 hover:text-blue-600">Contact</a>
-        <a href="{{ route('login') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
-          Sign In
+        <a href="{{ route('learn') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+          Learn more
         </a>
       </div>
     </div>
@@ -61,8 +61,8 @@
             Get Started
           </a>
           <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
-          <<a href="{{ route('learn') }}" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition duration-200">
-            Learn more
+          <<a href="{{ route('login') }}" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition duration-200">
+            Login
           </a>
         </div>
       </div>
@@ -200,27 +200,49 @@
 <img src="{{ asset('images/fuu.jpg') }}" alt="Lead Developer" class="w-24 h-24 rounded-full object-cover shadow-md">
         <div>
           <p class="text-gray-900 font-semibold text-lg">Mr:Ogwal Richard Richie</p>
-          <p class="text-gray-600 text-sm"> Developer, FinanceHub</p>
+          <p class="text-gray-600 text-sm"> Teachnical personel, FinanceHub</p>
         </div>
       </div>
     </div>
         <div class="bg-white p-8 rounded-xl shadow-lg">
           <h3 style="text-align: center"><strong>Inquire or send us your reviews
             </strong></h3>
-          <form class="space-y-6">
-            <input type="text" placeholder="Your Name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent">
-            <input type="email" placeholder="Email Address" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent">
-            <select class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent">
-              <option>Select Loan Type</option>
-              <option>Personal Loan</option>
-              <option>Business Loan</option>
-              <option>Home Loan</option>
+                @if(session('success'))
+            <div class="mb-4 text-green-600">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="mb-4 text-red-600">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>- {{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('loan.inquiry.submit') }}" class="space-y-6">
+            @csrf
+            <input type="text" name="name" placeholder="Your Name" value="{{ old('name') }}" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+
+            <input type="email" name="email" placeholder="Email Address" value="{{ old('email') }}" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+
+            <select name="loan_type" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                <option value="">Select Loan Type</option>
+                <option value="Personal Loan" {{ old('loan_type') == 'Personal Loan' ? 'selected' : '' }}>Personal Loan</option>
+                <option value="Business Loan" {{ old('loan_type') == 'Business Loan' ? 'selected' : '' }}>Business Loan</option>
+                <option value="Home Loan" {{ old('loan_type') == 'Home Loan' ? 'selected' : '' }}>Home Loan</option>
             </select>
-            <textarea placeholder="Your Message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent"></textarea>
-            <button class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-200">
-              Send Message
+
+            <textarea name="message" placeholder="Your Message" rows="4" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-transparent">{{ old('message') }}</textarea>
+
+            <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-200">
+                Send Message
             </button>
-          </form>
+        </form>
+
         </div>
       </div>
     </section>
