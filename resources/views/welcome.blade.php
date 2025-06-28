@@ -33,10 +33,10 @@
     <div class="flex justify-between h-16 items-center">
       <span class="text-2xl font-bold text-blue-600">FinanceHubTracker</span>
       <div class="hidden md:flex items-center space-x-6">
-        <a href="#" class="text-gray-700 hover:text-blue-600">Home</a>
-        <a href="#" class="text-gray-700 hover:text-blue-600">Services</a>
-        <a href="#" class="text-gray-700 hover:text-blue-600">About</a>
-        <a href="#" class="text-gray-700 hover:text-blue-600">Contact</a>
+        <a href="/" class="text-gray-700 hover:text-blue-600">Home</a>
+        <a href="{{ route('service') }}" class="text-gray-700 hover:text-blue-600">Services</a>
+        <a href="{{ route('price') }}" class="text-gray-700 hover:text-blue-600">Our Pricing</a>
+        <a href="{{ route('contact') }}" class="text-gray-700 hover:text-blue-600">Contact</a>
         <a href="{{ route('learn') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
           Learn more
         </a>

@@ -119,7 +119,7 @@
 
         <!-- Admin Name -->
         <div>
-          <label for="admin_name" class="block text-gray-700 text-sm font-medium mb-2">Yourc Name</label>
+          <label for="admin_name" class="block text-gray-700 text-sm font-medium mb-2"> Your Name</label>
           <input
             type="text"
             id="admin_name"

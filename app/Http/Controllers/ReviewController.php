@@ -11,9 +11,18 @@ use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
+    public function pricing(){
+        return view('business.pricing');
+    }
+      public function service(){
+        return view('business.services');
+    }
+         public function contact(){
+        return view('business.contact');
+    }
     public function dashboard()
     {
-        $userId = Auth::id(); // Get current user
+        $userId = Auth::id();
 
         $totalLoans = Loan::where('user_id', $userId)->count();
         $activeLoans = Loan::where('user_id', $userId)->where('status', 'active')->get();

@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reports/defaulters', [ReportController::class, 'defaultersReport'])->name('reports.defaulters');
     Route::get('/reports/repayments', [ReportController::class, 'repaymentHistory'])->name('reports.repayments');
     Route::get('/statistics', [ReviewController::class, 'dashboard'])->name('stat');
+
     Route::get('/reports/generate', [ReportController::class, 'showForm'])->name('reports.showForm');
     Route::get('/settled-loans', [SettledLoanController::class, 'index'])->name('settled_loans.index');
     Route::delete('/settled-loans/{id}', [SettledLoanController::class, 'destroy'])->name('settled_loans.destroy');
@@ -170,6 +171,9 @@ Route::get('/otp-verify', [OtpVerificationController::class, 'showVerifyForm'])-
 Route::post('/otp-verify', [OtpVerificationController::class, 'verifyOtp'])->name('otp.verify');
 Route::post('/resend-otp', [OtpVerificationController::class, 'resendOtp'])->name('otp.resend');
 
+        Route::get('/OurPricing', [ReviewController::class, 'pricing'])->name('price');
+        Route::get('/OurServices', [ReviewController::class, 'service'])->name('service');
+        Route::get('/Contact-us', [ReviewController::class, 'contact'])->name('contact');
 
 Route::get('/loan-inquiry', [LoanInquiryController::class, 'showForm'])->name('loan.inquiry');
 Route::post('/loan-inquiry', [LoanInquiryController::class, 'submit'])->name('loan.inquiry.submit');

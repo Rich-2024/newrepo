@@ -91,8 +91,31 @@
           </button>
           <div id="dashboardDropdown" class="hidden space-y-2 px-4">
 
-         <a href="/dashboard/view" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Overview</a>
-            <a href="{{ route('loans.clients.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">View clients</a>
+         <!-- Dashboard Overview -->
+<a href="/dashboard/view"
+   class="flex items-center gap-3 px-4 py-2 rounded-md transition-colors duration-200
+   {{ request()->is('dashboard/view') ? 'bg-indigo-100 text-indigo-600 font-semibold' : 'text-gray-700 hover:bg-indigo-100 hover:text-indigo-600' }}">
+
+    <svg class="w-5 h-5 {{ request()->is('dashboard/view') ? 'text-indigo-600' : 'text-indigo-500' }}"
+         fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h6"/>
+    </svg>
+
+    <span class="text-sm font-medium">Overview</span>
+</a>
+
+
+<!-- View Clients -->
+<a href="{{ route('loans.clients.index') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <svg class="w-5 h-5 mr-2 text-cyan-600" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M17 20h5v-2a4 4 0 00-5-3.87M9 20H4v-2a4 4 0 015-3.87m1-1.13a4 4 0 100-8 4 4 0 000 8zm6 0a4 4 0 100-8 4 4 0 000 8z"/>
+    </svg>
+    View Clients
+</a>
 
         </div>
         </div>
@@ -107,11 +130,54 @@
           </button>
           <div id="clientsDropdown" class="hidden space-y-2 px-4">
 
-         <a href="{{ route('create') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Create loan</a>
-         <a href="/repayment" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Repay loan</a>
-    <a href="{{ route('clients.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Manage Loans</a>
-    <a href="{{ route('settled_loans.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Settled loans</a>
-        <a href="{{ route('fine_loans.table') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">view fines</a>
+<!-- Create Loan -->
+<a href="{{ route('create') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+    </svg>
+    Create Loan
+</a>
+
+<!-- Repay Loan -->
+<a href="/repayment" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M17 9V7a4 4 0 00-8 0v2m-2 4h12m-6 4v-4"/>
+    </svg>
+    Repay Loan
+</a>
+
+<!-- Manage Loans -->
+<a href="{{ route('clients.index') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 7h18M3 12h18M3 17h18"/>
+    </svg>
+    Manage Loans
+</a>
+
+<!-- Settled Loans -->
+<a href="{{ route('settled_loans.index') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <svg class="w-5 h-5 mr-2 text-emerald-600" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M5 13l4 4L19 7"/>
+    </svg>
+    Settled Loans
+</a>
+
+<!-- View Fines -->
+<a href="{{ route('fine_loans.table') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <svg class="w-5 h-5 mr-2 text-red-500" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 8v4m0 4h.01M4.93 4.93a10 10 0 0114.14 0M4.93 19.07a10 10 0 0114.14 0"/>
+    </svg>
+    View Fines
+</a>
 
 
         </div>
@@ -126,8 +192,24 @@
             </svg>
           </button>
           <div id="loanHistoryDropdown" class="hidden space-y-2 px-4">
-            <a href="{{ route('reports.repayments') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Repayments</a>
-            <a href="{{ route('reports.defaulters') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Defaulters</a>
+<a href="{{ route('reports.repayments') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <!-- Icon: Money / Transaction -->
+    <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 8c-1.657 0-3 1.567-3 3.5S10.343 15 12 15s3-1.567 3-3.5S13.657 8 12 8zM3 12a9 9 0 0118 0 9 9 0 01-18 0zm9-9v2m0 14v2" />
+    </svg>
+    Repayments
+</a>
+<a href="{{ route('reports.defaulters') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <!-- Icon: Alert / Exclamation -->
+    <svg class="w-5 h-5 mr-2 text-red-500" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 9v3.75m0 3.75h.007M10.29 3.86L1.82 18a1.5 1.5 0 001.29 2.25h17.78a1.5 1.5 0 001.29-2.25L13.71 3.86a1.5 1.5 0 00-2.42 0z" />
+    </svg>
+    Defaulters
+</a>
           </div>
         </div>
 
@@ -140,8 +222,24 @@
             </svg>
           </button>
           <div id="reportsDropdown" class="hidden space-y-2 px-4">
-            <a href="{{ route('reports.generate') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Business Reports</a>
-            <a href="{{ route('stat') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Statistic Rating</a>
+<a href="{{ route('reports.generate') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <!-- Icon: Chart Bar -->
+    <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 3v18h18M9 17V9m4 8v-4m4 4v-6" />
+    </svg>
+    Business Reports
+</a>
+<a href="{{ route('stat') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <!-- Icon: Chart Line -->
+    <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 3v18h18M4 16l5-6 4 5 7-10" />
+    </svg>
+    Statistic Rating
+</a>
           </div>
         </div>
 
@@ -154,10 +252,37 @@
             </svg>
           </button>
           <div id="settingsDropdown" class="hidden space-y-2 px-4">
-            <a href="{{ route('interest') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Interest rate Settings</a>
-                        <a href="{{ route('loan_fines.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Define Fine</a>
+<a href="{{ route('interest') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <!-- Icon (e.g., a calculator or currency icon) -->
+    <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 8c-1.657 0-3 1.567-3 3.5S10.343 15 12 15s3-1.567 3-3.5S13.657 8 12 8zm0 0V6m0 9v2.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    </svg>
 
-            <a href="{{ route('profile') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">Admin profile settting</a>
+    Interest Rate Settings
+</a>
+<a href="{{ route('loan_fines.index') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <!-- Icon (e.g., scale icon to represent fine/penalty) -->
+    <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 3v2m6.364 1.636l-1.414 1.414M21 12h-2M17.364 17.364l-1.414-1.414M12 21v-2M6.636 17.364l1.414-1.414M3 12h2M6.636 6.636l1.414 1.414M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+    </svg>
+    Define Fine
+</a>
+
+<a href="{{ route('profile') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <!-- Icon: User Circle -->
+    <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4.5 19.5a8.25 8.25 0 1115 0v.75a.75.75 0 01-.75.75h-13.5a.75.75 0 01-.75-.75V19.5z" />
+    </svg>
+    Admin Profile Setting
+</a>
           </div>
         </div>
 
