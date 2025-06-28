@@ -8,6 +8,8 @@
         <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">Manage Clients</h2>
 
         <!-- Search Form -->
+        <div class="w-full flex justify-center mb-6">
+
         <form method="GET" action="{{ route('clients.index') }}" class="w-full sm:w-auto">
             <div class="relative">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Search clients..."
@@ -20,7 +22,7 @@
             </div>
         </form>
     </div>
-
+</div>
     <div class="overflow-x-auto bg-white shadow-md rounded-lg">
         <table class="min-w-full divide-y divide-gray-200 text-sm sm:text-base">
             <thead class="bg-gray-100">
@@ -28,11 +30,9 @@
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Name</th>
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Contact</th>
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Loan Issued</th>
-                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Interest Rate</th>
-                  {{-- <th class="px-4 py-3 text-left font-semibold text-gray-600">Loan Duration</th> --}}
-                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Loan Issued Date</th>
-                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Loan End Date</th>
-
+                    <th class="px-4 py-3 text-left font-semibold text-gray-600">Interest Rate</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-600">Loan Issued Date</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-600">Loan End Date</th>
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Daily Repayment</th>
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Total to Pay</th>
                     <th class="px-4 py-3 text-left font-semibold text-gray-600">Repayment Made</th>
@@ -42,20 +42,31 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @forelse ($clients as $client)
+                @php
+                    use Illuminate\Support\Str;
+                    $resultsFound = false;
+                    $search = Str::lower(request('search'));
+                @endphp
+
+                @foreach ($clients as $client)
                     @php
                         $repaymentMade = $reps->where('loan_id', $client->id)->sum('amount');
+                        $matches = !$search || Str::contains(Str::lower($client->name), $search) || Str::contains(Str::lower($client->contact), $search);
                     @endphp
+
+                    @if (!$matches)
+                        @continue
+                    @endif
+
+                    @php $resultsFound = true; @endphp
+
                     <tr>
                         <td class="px-4 py-3 text-gray-800">{{ $client->name }}</td>
                         <td class="px-4 py-3 text-gray-800">{{ $client->contact }}</td>
                         <td class="px-4 py-3 text-gray-800">UGX {{ number_format($client->amount) }}</td>
-                     <td class="px-4 py-3 text-gray-800"> {{ number_format($client->interest_rate) }}%</td>
-                     {{-- <td class="px-4 py-3 text-gray-800"> {{ number_format($client->loan_duration) }} days</td> --}}
+                        <td class="px-4 py-3 text-gray-800">{{ number_format($client->interest_rate) }}%</td>
                         <td class="px-4 py-3 text-gray-800">{{ $client->loan_date }}</td>
                         <td class="px-4 py-3 text-gray-800">{{ $client->End_date }}</td>
-
-
                         <td class="px-4 py-3 text-gray-800">UGX {{ number_format($client->daily_repayment) }}</td>
                         <td class="px-4 py-3 text-gray-800">UGX {{ number_format($client->total_amount) }}</td>
                         <td class="px-4 py-3 text-gray-800">UGX {{ number_format($repaymentMade) }}</td>
@@ -65,20 +76,18 @@
                             <button type="button" onclick="openEditModal('{{ $client->id }}', '{{ $client->name }}', '{{ $client->contact }}')"
                                 class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600">Edit</button>
 
-                            <button
-                                onclick="openRepayModal('{{ $client->id }}', '{{ $client->name }}')"
+                            <button onclick="openRepayModal('{{ $client->id }}', '{{ $client->name }}')"
                                 class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600">Repay</button>
-                        </td>
-                        <td>
-                                                     <button
-                                class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600"><a href="{{ route('loans.printIssuance', $client->id) }}" target="_blank" class="text-green-600 hover:underline">
-    Print Issuance
-</a>
+
+                            <a href="{{ route('loans.printIssuance', $client->id) }}" target="_blank"
+                                class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600 text-center">Print Issuance</a>
                         </td>
                     </tr>
-                @empty
+                @endforeach
+
+                @if (!$resultsFound)
                     <tr>
-                        <td colspan="9" class="px-4 py-5 text-center text-gray-500">No clients found.</td>
+                        <td colspan="12" class="px-4 py-5 text-center text-gray-500">No clients match your search.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -87,6 +96,7 @@
 </div>
 
 <!-- Repayment Modal -->
+
 <div id="repayModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
     <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
         <h3 class="text-lg font-semibold text-gray-800 mb-2">Repayment Form</h3>
@@ -132,12 +142,13 @@
         </form>
     </div>
 </div>
+<!-- ... your repayment modal remains unchanged ... -->
 
-<!-- Edit Client Modal -->
+<!-- ✅ Edit Client Modal (FIXED ACTION!) -->
 <div id="editModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96 max-w-full">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Edit Client Details</h3>
-        <form id="editForm" method="POST" action="{{ route('clients.update', ['id' => $client]) }}">
+        <form id="editForm" method="POST" action=""> {{-- FIXED: action is set via JS --}}
             @csrf
             @method('PUT')
             <input type="hidden" name="loan_id" id="loan_id" />
@@ -162,26 +173,27 @@
 
 @endsection
 
+{{-- ✅ JavaScript Section --}}
 <script>
-    // Open the modal for editing
     function openEditModal(clientId, clientName, clientContact) {
         document.getElementById('loan_id').value = clientId;
         document.getElementById('client_name').value = clientName;
         document.getElementById('client_phone').value = clientContact;
+
+        const form = document.getElementById('editForm');
+        form.action = `/clients/${clientId}`; // ✅ Set action dynamically
 
         const modal = document.getElementById('editModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }
 
-    // Close the edit modal
     function closeModal() {
         const modal = document.getElementById('editModal');
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     }
 
-    // Open Repayment Modal
     function openRepayModal(loanId, clientName) {
         document.getElementById('modal_loan_id').value = loanId;
         document.getElementById('clientName').innerText = clientName;
@@ -189,7 +201,6 @@
         document.getElementById('repayModal').classList.add('flex');
     }
 
-    // Close Repayment Modal
     function closeRepayModal() {
         document.getElementById('repayModal').classList.add('hidden');
         document.getElementById('repayModal').classList.remove('flex');

@@ -12,6 +12,7 @@
                     <th>📄 Loan ID</th>
                     <th>👤 Client</th>
                     <th>💳 Balance</th>
+                      <th>📆 Daily Rate</th>
                     <th>📆 Start Date</th>
                     <th>📆 Calculated End Date</th>
                     <th>⏱️ Admin Fine Limit (days)</th>
@@ -26,25 +27,27 @@
                         <td class="text-center">{{ $loan->id }}</td>
                         <td>{{ $loan->name }}</td>
                         <td class="text-end text-warning">UGX {{ number_format($loan->balance_left, 2) }}</td>
+                        <td class="text-end text-warning">UGX {{ number_format($rate, 0) }}%</td>
+
                         <td class="text-center">{{ \Carbon\Carbon::parse($loan->created_at)->format('d/m/Y') }}</td>
 
                         {{-- Dynamically calculate loan-specific end date --}}
                         <td class="text-center">
-                            {{ \Carbon\Carbon::parse($loan->created_at)->addDays($fineDuration)->format('d/m/Y') }}
+                            {{ \Carbon\Carbon::parse($loan->fine_end_date)->format('d/m/Y') }}
                         </td>
 
-                        <td class="text-center">{{ $fineDuration }} days</td>
+                        <td class="text-center">every({{ $limit  }} days</td>
                         <td class="text-center">{{ $loan->overdue_days }} days</td>
 
                         <td class="text-end text-danger fw-bold">
                             UGX {{ number_format($loan->fine_total, 2) }}
                         </td>
                         <td class="text-center">
-                             
-                                <button 
-                                onclick="openRepayModal('{{ $loan->id }}', '{{ $loan->name }}')" 
+
+                                <button
+                                onclick="openRepayModal('{{ $loan->id }}', '{{ $loan->name }}')"
                                 class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600">Repay</button>
-                       
+
                         </td>
                     </tr>
                 @empty
@@ -91,7 +94,7 @@
 @endif
 
         <form id="repayForm" method="POST" action="{{ route('repayments.settle') }}">
-            
+
             @csrf
             <input type="hidden" name="loan_id" id="modal_loan_id" />
 

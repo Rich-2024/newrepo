@@ -39,14 +39,15 @@ public function create(Request $request)
 
     // Loop through each client and process their loan
     foreach ($validated['clients'] as $clientData) {
+$existingClient = Loan::where('contact', $clientData['contact'])
+                      ->where('user_id', $userId)
+                      ->first();
 
-        $existingClient = Loan::where('contact', $clientData['contact'])->first();
+if ($existingClient) {
+    $errors[] = "Client with contact {$clientData['contact']} already have a pending Active loan: {$existingClient->name}";
+    continue;
+}
 
-        if ($existingClient->with('user_id',    $userId )) {
-            // Add error for duplicate client contact
-            $errors[] = "Client with contact {$clientData['contact']} already exists: {$existingClient->name}";
-            continue;
-        }
 
         // Get the loan amount from the form
         $amount = $clientData['amount'];
@@ -73,7 +74,7 @@ public function create(Request $request)
             'total_amount'     => round($totalToPay, 2),
             'balance_to_pay'   => round($totalToPay, 2),
             'daily_repayment'  => round($dailyRepayment, 2),
-            'status'           => 'active',  // Set initial status to active
+            'status'           => 'active',
             'created_at'       => now(),
             'updated_at'       => now(),
         ];
@@ -120,7 +121,6 @@ private function moveInactiveLoansToSettled()
             'updated_at'       => now(),
         ]);
 
-        // Optionally delete or mark the loan as settled in the original loans table
      $loan->delete();
     }
 }

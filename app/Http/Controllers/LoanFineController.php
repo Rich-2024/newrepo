@@ -75,31 +75,40 @@ public function updateSettings(Request $request)
     return redirect()->route('loan_fines.index')->with('success', 'Fine settings updated successfully!');
 }
 
-    public function fineLoansTable()
-    {
-        $userId = Auth::id();
+public function fineLoansTable()
+{
+    $userId = Auth::id();
 
-        $rate = Setting::where('key', 'fine_rate')->where('user_id', $userId)->first()->value ?? 0;
-        $endDate = Setting::where('key', 'fine_end_date')->where('user_id', $userId)->first()->value ?? now()->toDateString();
+    $rate = Setting::where('key', 'fine_rate')->where('user_id', $userId)->first()->value ?? 0;
+    $limit = Setting::where('key', 'fine_duration')->where('user_id', $userId)->first()->value ?? 0;
 
-        $loans = SettledLoan::where('balance_left', '>', 0)
-            ->where('user_id', $userId)
-            ->get();
+    $loans = SettledLoan::where('balance_left', '>', 0)
+        ->where('user_id', $userId)
+        ->get();
 
-        $minStart = $loans->min('created_at');
-        $maxEnd = Carbon::parse($endDate)->startOfDay();
-        $fineDuration = floor(Carbon::parse($minStart)->diffInDays($maxEnd));
+    foreach ($loans as $loan) {
+        $loanStart = Carbon::parse($loan->created_at)->startOfDay();
 
-        foreach ($loans as $loan) {
-            $createdAt = Carbon::parse($loan->created_at)->startOfDay();
-            $actualOverdueDays = max(0, $createdAt->diffInDays($maxEnd));
-            $overdueDays = min($actualOverdueDays, intval($fineDuration));
-            $loan->overdue_days = $overdueDays;
-            $loan->fine_total = $overdueDays * (floatval($rate) / 100) * floatval($loan->balance_left);
-        }
+        // Fine applies from created_at to created_at + fine_duration
+        $fineEnd = $loanStart->copy()->addDays(intval($limit));
+        $now = now()->startOfDay();
 
-        return view('partials.fine_table', compact('loans', 'rate', 'endDate', 'fineDuration'));
+        // Fineable days = days between created_at and either now or fineEnd
+        $actualFineDays = max(0, $loanStart->diffInDays(min($now, $fineEnd)));
+
+        // Store calculated fields
+        $loan->overdue_days = max(0, $loanStart->diffInDays($now));
+        $loan->fine_end_date = $fineEnd->toDateString();
+
+        $dailyFine = (floatval($rate) / 100) * floatval($loan->balance_left);
+        $loan->fine_total = round($dailyFine * $actualFineDays, 2);
     }
+
+    // ✅ Removed fineEnd from here
+    return view('partials.fine_table', compact('loans', 'rate', 'limit'));
+}
+
+
 
     public function settle(Request $request)
     {
