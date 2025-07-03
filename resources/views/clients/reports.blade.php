@@ -43,7 +43,7 @@
     <form method="GET" action="{{ route('reports.repayments') }}" class="flex items-center space-x-2">
         <input type="text" name="search" id="search" class="form-input rounded border-gray-300 mt-1" placeholder="Search by Client Name or Loan ID" value="{{ request('search') }}">
         <button type="submit" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-3 py-2 rounded">
-            <i class="fas fa-search"></i>
+            <i class="fas fa-search">filter</i>
         </button>
     </form>
 </div>

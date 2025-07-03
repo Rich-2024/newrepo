@@ -98,4 +98,5 @@ class ReviewController extends Controller
             'settledLoans'
         ));
     }
+    
 }

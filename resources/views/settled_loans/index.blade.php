@@ -53,7 +53,7 @@
                                 @method('DELETE')
                             </form>
                           <button class="btn btn-sm btn-danger" onclick="confirmDelete({{ $loan->id }})">
-    🗑️ <span style="color: red;">Delete</span>
+    🗑️ <span style="color: red;">Archive</span>
 </button>
 
                         </td>
@@ -84,12 +84,12 @@
     function confirmDelete(id) {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'Deleting this record will permanently remove it.',
+            text: 'Archieving this record will inactivate  and put in read only mode for future use or reference.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#e3342f',
             cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: 'Yes, just archive it!',
             cancelButtonText: 'Cancel',
             reverseButtons: true
         }).then((result) => {

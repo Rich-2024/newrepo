@@ -6,7 +6,7 @@
   <title>Loan Management System</title>
 
   <!-- ✅ Favicon -->
-  <link rel="icon" type="image/png" href="{{ asset('images/loan.png') }}">
+<link rel="icon" type="image/png" href="{{ url('images/loan.png') }}">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -39,7 +39,7 @@
     <!-- Admin Profile -->
     <div class="relative">
       <button id="profileButton" class="flex items-center focus:outline-none">
-        <img src="https://i.pravatar.cc/40?img=3" alt="Admin" class="w-10 h-10 rounded-full border-2 border-primary">
+        <img src="{{ $user->profile_picture ?? 'https://i.pravatar.cc/150?img=3' }}" alt="Admin" class="w-10 h-10 rounded-full border-2 border-primary">
       </button>
 
       <!-- Dropdown -->
@@ -210,6 +210,29 @@
     </svg>
     Defaulters
 </a>
+<a href="{{ route('settled') }}"
+   class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 8c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm0 10.5c4.142 0 7.5-3.358 7.5-7.5S16.142 3.5 12 3.5 4.5 6.858 4.5 11s3.358 7.5 7.5 7.5z" />
+    </svg>
+    Overdue Repayments
+</a>
+<a href="{{ route('archived_settled_loans.index') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <!-- Icon: Archive Box -->
+    <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4z" />
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M5 8h14v11a1 1 0 01-1 1H6a1 1 0 01-1-1V8z" />
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M10 12h4" />
+    </svg>
+    Archives
+</a>
+
           </div>
         </div>
 
@@ -231,6 +254,16 @@
     </svg>
     Business Reports
 </a>
+<a href="{{ route('loan.report') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
+    <!-- Icon: Magnifying Glass Chart -->
+    <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" stroke-width="1.5"
+         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
+    </svg>
+    Analysis
+</a>
+
 <a href="{{ route('stat') }}" class="flex items-center px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-600 transition">
     <!-- Icon: Chart Line -->
     <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" stroke-width="1.5"

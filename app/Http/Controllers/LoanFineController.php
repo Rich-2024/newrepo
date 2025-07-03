@@ -104,10 +104,58 @@ public function fineLoansTable()
         $loan->fine_total = round($dailyFine * $actualFineDays, 2);
     }
 
-    // ✅ Removed fineEnd from here
+
     return view('partials.fine_table', compact('loans', 'rate', 'limit'));
 }
 
+// public function fineLoansTable()
+// {
+//     $userId = Auth::id();
+
+//     $rate = Setting::where('key', 'fine_rate')->where('user_id', $userId)->first()->value ?? 0;
+//     $limit = Setting::where('key', 'fine_duration')->where('user_id', $userId)->first()->value ?? 0;
+
+//     $loans = SettledLoan::where('balance_left', '>', 0)
+//         ->where('user_id', $userId)
+//         ->where(function ($query) {
+//             // Only include loans that:
+//             // a) have not already had fine applied, OR
+//             // b) still within fine window
+//             $query->whereNull('fine_already_charged')
+//                   ->orWhere('fine_already_charged', false);
+//         })
+//         ->get();
+
+//     foreach ($loans as $loan) {
+//         $loanStart = Carbon::parse($loan->created_at)->startOfDay();
+
+//         // Fine applies from created_at to created_at + fine_duration
+//         $fineEnd = $loanStart->copy()->addDays(intval($limit));
+//         $now = now()->startOfDay();
+
+//         // Fineable days = days between created_at and either now or fineEnd
+//         $actualFineDays = max(0, $loanStart->diffInDays(min($now, $fineEnd)));
+
+//         // Store calculated fields
+//         $loan->overdue_days = max(0, $loanStart->diffInDays($now));
+//         $loan->fine_end_date = $fineEnd->toDateString();
+
+//         $dailyFine = (floatval($rate) / 100) * floatval($loan->balance_left);
+//         $loan->fine_total = round($dailyFine * $actualFineDays, 2);
+
+//         //  New logic: store fine permanently when end date elapses and not already stored
+//         if ($now->greaterThan($fineEnd) && is_null($loan->stored_fine_total)) {
+//             $loan->stored_balance_left = $loan->balance_left;
+//             $loan->stored_fine_total = $loan->fine_total;
+//             $loan->balance_left += $loan->fine_total;
+//             $loan->last_fine_applied_at = $now;
+//             $loan->fine_already_charged = true; //  prevent future reprocessing
+//             $loan->save();
+//         }
+//     }
+
+//     return view('partials.fine_table', compact('loans', 'rate', 'limit'));
+// }
 
 
     public function settle(Request $request)

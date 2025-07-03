@@ -118,6 +118,7 @@ class ProcessExpiredLoans extends Command
                 'daily_repayment'  => $loan->daily_repayment,
                 'balance_left'     => $loan->balance_to_pay,
                 'user_id'          => $loan->user_id,
+                 'amount_copy'      => $loan->amount,
                 'created_at'       => now(),
                 'updated_at'       => now(),
             ]);

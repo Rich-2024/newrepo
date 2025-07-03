@@ -22,47 +22,45 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($loans as $loan)
-                    <tr>
-                        <td class="text-center">{{ $loan->id }}</td>
-                        <td>{{ $loan->name }}</td>
-                        <td class="text-end text-warning">UGX {{ number_format($loan->balance_left, 2) }}</td>
-                        <td class="text-end text-warning">UGX {{ number_format($rate, 0) }}%</td>
+               @php
+    $overdueLoans = $loans->filter(function ($loan) {
+        return $loan->balance_left > 0 || $loan->fine_total > 0;
+    });
+@endphp
 
-                        <td class="text-center">{{ \Carbon\Carbon::parse($loan->created_at)->format('d/m/Y') }}</td>
+@forelse($overdueLoans as $loan)
+    <tr>
+        <td class="text-center">{{ $loan->id }}</td>
+        <td>{{ $loan->name }}</td>
+        <td class="text-end text-warning">UGX {{ number_format($loan->balance_left, 2) }}</td>
+        <td class="text-end text-warning">UGX {{ number_format($rate, 0) }}%</td>
+        <td class="text-center">{{ \Carbon\Carbon::parse($loan->created_at)->format('d/m/Y') }}</td>
+        <td class="text-center">{{ \Carbon\Carbon::parse($loan->fine_end_date)->format('d/m/Y') }}</td>
+        <td class="text-center">every({{ $limit }} days)</td>
+        <td class="text-center">{{ $loan->overdue_days }} days</td>
+        <td class="text-end text-danger fw-bold">UGX {{ number_format($loan->fine_total, 2) }}</td>
+        <td class="text-center">
+            <button
+                onclick="openRepayModal('{{ $loan->id }}', '{{ $loan->name }}')"
+                class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600">
+                Repay
+            </button>
+        </td>
+    </tr>
+@empty
+    <tr>
+        <td colspan="9" class="text-center text-muted py-4">
+            📭 No overdue loans found.
+        </td>
+    </tr>
+@endforelse
 
-                        {{-- Dynamically calculate loan-specific end date --}}
-                        <td class="text-center">
-                            {{ \Carbon\Carbon::parse($loan->fine_end_date)->format('d/m/Y') }}
-                        </td>
-
-                        <td class="text-center">every({{ $limit  }} days</td>
-                        <td class="text-center">{{ $loan->overdue_days }} days</td>
-
-                        <td class="text-end text-danger fw-bold">
-                            UGX {{ number_format($loan->fine_total, 2) }}
-                        </td>
-                        <td class="text-center">
-
-                                <button
-                                onclick="openRepayModal('{{ $loan->id }}', '{{ $loan->name }}')"
-                                class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600">Repay</button>
-
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="9" class="text-center text-muted py-4">
-                            📭 No overdue loans found.
-                        </td>
-                    </tr>
-                @endforelse
             </tbody>
 
             <tfoot>
                 <tr class="table-primary">
                     <td colspan="7" class="text-end fw-bold">
-                        Total Overdue Balance (Fines included)
+                        Total Overdue Balance (original balance)
                     </td>
                    <td colspan="2" class="text-end fw-bold" style="color: red; font-weight: bold; font-size: 1.2rem;">
     UGX {{ number_format($loans->sum('balance_left'), 2) }}
@@ -93,46 +91,51 @@
     </ul>
 @endif
 
-        <form id="repayForm" method="POST" action="{{ route('repayments.settle') }}">
+    <form id="repayForm" method="POST" action="{{ route('repayments.settles') }}">
+    @csrf
 
-            @csrf
-            <input type="hidden" name="loan_id" id="modal_loan_id" />
+    <!-- ✅ Correct input name to match controller validation -->
+    <input type="hidden" name="settled_loan_id" id="modal_loan_id" />
 
-            <div class="mb-4">
-                <label for="amount" class="block text-sm font-medium text-gray-700">Amount (UGX)</label>
-                <input type="number" name="amount" id="amount" required
-                    class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholder="Enter amount">
-            </div>
-
-            <div class="mb-4">
-                <label for="payment_date" class="block text-sm font-medium text-gray-700">Payment Date</label>
-                <input type="date" name="payment_date" id="payment_date" required
-                    class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-            </div>
-
-            <div class="mb-4">
-                <label for="note" class="block text-sm font-medium text-gray-700">Note (optional)</label>
-                <textarea name="note" id="note" rows="3"
-                    class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholder="Any remarks..."></textarea>
-            </div>
-
-            <div class="flex justify-end space-x-4">
-                <button type="button" onclick="closeRepayModal()"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded">
-                    Cancel
-                </button>
-                <button type="submit"
-                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
-                    Repay
-                </button>
-            </div>
-        </form>
+    <!-- Optional: Dynamic client name display -->
+    <div class="mb-4 text-lg font-semibold text-gray-800">
+        You're repaying for: <span id="clientName" class="font-bold text-indigo-600"></span>
     </div>
-</div>
+
+    <div class="mb-4">
+     <label for="amount_copy" class="block text-sm font-medium text-gray-700">Amount (UGX)</label>
+<input type="number" name="amount_copy" id="amount_copy" required step="0.01" min="0"
+    class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+    placeholder="Enter amount">
+
+    </div>
+
+    <div class="mb-4">
+        <label for="payment_date" class="block text-sm font-medium text-gray-700">Payment Date</label>
+        <input type="date" name="payment_date" id="payment_date" required
+            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+    </div>
+
+    <div class="mb-4">
+        <label for="note" class="block text-sm font-medium text-gray-700">Note (optional)</label>
+        <textarea name="note" id="note" rows="3"
+            class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Any remarks..."></textarea>
+    </div>
+
+    <div class="flex justify-end space-x-4">
+        <button type="button" onclick="closeRepayModal()"
+            class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded">
+            Cancel
+        </button>
+        <button type="submit"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+            Repay
+        </button>
+    </div>
+</form>
 <script>
-      // Open Repayment Modal
+    // Open Repayment Modal
     function openRepayModal(loanId, clientName) {
         document.getElementById('modal_loan_id').value = loanId;
         document.getElementById('clientName').innerText = clientName;
@@ -146,4 +149,5 @@
         document.getElementById('repayModal').classList.remove('flex');
     }
 </script>
+
 @endsection

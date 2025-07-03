@@ -10,13 +10,12 @@ class Repayment extends Model
 
     // Fillable properties
     protected $fillable = [
-        'loan_id', 
+        'loan_id',
         'amount',
         'payment_date',
         'note',
     ];
 
-    // Define the relationship between repayment and loan
     public function loan()
     {
         return $this->belongsTo(Loan::class);

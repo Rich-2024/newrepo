@@ -22,4 +22,9 @@ class SettledLoan extends Model
         'created_at',
         'updated_at',
     ];
+    public function settledRepayments()
+{
+    return $this->hasMany(SettledRepayment::class);
+}
+
 }
