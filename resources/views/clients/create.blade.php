@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-@include('partials.success');
+
 <div class="bg-white rounded-lg shadow p-6 max-w-5xl mx-auto mt-3">
     <h2 class="text-2xl font-semibold mb-6 mt-0">Register New Clients & Loans</h2>
-
+@include('partials.success');
     <form id="clientForm" method="POST" action="{{ route('storeclients') }}">
         @csrf
 

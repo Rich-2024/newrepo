@@ -84,7 +84,7 @@
     function confirmDelete(id) {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'Archieving this record will inactivate  and put in read only mode for future use or reference.',
+            text: 'Archieving this record will inactivate  and put in read only mode for future use or reference.Please archive this record if fine is cleared',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#e3342f',

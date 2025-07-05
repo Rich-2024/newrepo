@@ -204,4 +204,17 @@ public function fineLoansTable()
 
         return redirect()->back()->with('success', 'Repayment successfully recorded.');
     }
+ 
+public function updateFineStatus(Request $request, SettledLoan $loan)
+{
+    $request->validate([
+        'status' => 'required|in:paid,not_paid'
+    ]);
+
+    $loan->fine_status = $request->status;
+    $loan->save();
+
+    return response()->json(['success' => true]);
+}
+
 }

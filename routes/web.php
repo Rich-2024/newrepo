@@ -92,7 +92,9 @@ Route::delete('/archived-settled-loans/{id}', [ArchivedSettledLoanController::cl
     Route::post('/loans/{loanId}/attachments', [AttachmentController::class, 'store'])->name('attachments.store');
 Route::post('/profile/upload-picture', [AdminController::class, 'uploadPicture'])->name('profile.uploadPicture');
 
-    // Other protected POST/PUT routes
+
+Route::post('/update-fine-status/{loan}', [LoanFineController::class, 'updateFineStatus'])->name('loan.updateFineStatus');
+
     Route::post('/interest',[ViewController::class, 'month'])->name('admin.loans.store');
     Route::post('/interest',[ViewController::class, 'month'])->name('client');
     Route::post('/set-interest-rate', [LogicController::class, 'store'])->name('interest.store');

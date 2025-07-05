@@ -4,6 +4,7 @@
 <div class="container mx-auto px-4 py-6 mt-6">
     <h1 class="text-2xl sm:text-3xl font-bold text-center text-indigo-700 mb-6">
         Archived Settled Loans
+        @include('partials.success')
     </h1>
 
     {{-- Search Bar --}}

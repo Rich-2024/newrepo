@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-@include('partials.success');
+
 <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow mt-0 w-100">
+    @include('partials.success')
     <h2 class="text-2xl font-semibold mb-4 mt-5">Log a Client Repayment</h2>
 
     <form id="repaymentForm" method="POST" action="{{ route('repayments.store') }}" class="space-y-6">

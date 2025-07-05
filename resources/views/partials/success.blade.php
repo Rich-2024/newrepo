@@ -1,53 +1,32 @@
-{{-- Flash Messages --}}
 @if(session('success'))
-    <div id="messagePopup" class="popup success">
+    <div id="flash-message" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
         {{ session('success') }}
     </div>
 @endif
 
-@if($errors->any() && !session('success'))
-    <div id="messagePopup" class="popup error">
-        @foreach($errors->all() as $error)
-            <p>{{ $error }}</p>
-        @endforeach
+@if(session('error'))
+    <div id="flash-message" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ session('error') }}
     </div>
 @endif
 
-{{-- Flash Message Auto Dismiss --}}
 <script>
-    window.onload = function () {
-        const popup = document.getElementById('messagePopup');
-        if (popup) {
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3000);
+    // Auto-hide flash message after 3 seconds (3000 ms)
+    setTimeout(() => {
+        const flash = document.getElementById('flash-message');
+        if (flash) {
+            // fade out effect (optional)
+            flash.style.transition = 'opacity 0.5s ease';
+            flash.style.opacity = '0';
+
+            // after fade out, remove from DOM
+            setTimeout(() => flash.remove(), 500);
         }
-    };
+    }, 3000);
 </script>
 
-{{-- Flash Message Styling --}}
-<style>
-    .popup {
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 15px;
-        border-radius: 8px;
-        font-weight: bold;
-        z-index: 9999;
-        display: none;
-    }
-                /* <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6"> */
-
-   .success {
-    background-color: #28a745;
-    color: white;
-    display: block;
-}
-    .error {
-        background-color: #dc3545;
-        color: white;
-        display: block;
-    }
-</style>
+@if(session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ session('error') }}
+    </div>
+@endif

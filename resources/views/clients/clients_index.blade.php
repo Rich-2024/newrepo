@@ -1,8 +1,9 @@
 @extends('layouts.app')
-@include('partials.success')
+
 
 @section('content')
 <div class="container mx-auto px-4 py-6 mt-5">
+    @include('partials.success')
     <h2 class="text-2xl font-bold mb-6 text-center text-blue-700">Loan Issued Clients</h2>
 
     <!-- Search -->

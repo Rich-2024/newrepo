@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-@include('partials.success')
+
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-5">
+    @include('partials.success')
     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 space-y-4 sm:space-y-0">
         <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">Manage Clients</h2>
 

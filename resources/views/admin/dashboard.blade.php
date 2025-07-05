@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-@include('partials.success');
+
     <div class="mb-6 mt-6">
         <h1 class="text-2xl font-semibold text-gray-800">Dashboard Overview</h1>
         <p class="text-sm text-gray-500 mt-3">Welcome, Loan Admin! Here's a summary of your loan system.</p>
+        @include('partials.success')
     </div>
 
     <!-- Stats Section -->

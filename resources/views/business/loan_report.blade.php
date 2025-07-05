@@ -11,24 +11,24 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-10">
 
         <div class="p-6 bg-indigo-50 rounded-lg shadow text-center">
-            <h3 class="text-lg font-semibold text-indigo-700 mb-3 uppercase tracking-wide">Total Loans Issued</h3>
+            <h3 class="text-lg font-semibold text-indigo-700 mb-3 uppercase tracking-wide">Total Loans Issued -Active</h3>
             <p class="text-4xl font-extrabold text-indigo-900">{{ $loanStats->total_loans }}</p>
         </div>
 
         <div class="p-6 bg-green-50 rounded-lg shadow text-center">
-            <h3 class="text-lg font-semibold text-green-700 mb-3 uppercase tracking-wide">Total Loans Issued (UGX)</h3>
+            <h3 class="text-lg font-semibold text-green-700 mb-3 uppercase tracking-wide">Total Loans Issued (UGX)-Active </h3>
             <p class="text-4xl font-extrabold text-green-900">UGX {{ number_format($loanStats->total_loan_amount, 2) }}</p>
         </div>
 
         <div class="p-6 bg-yellow-50 rounded-lg shadow text-center">
-            <h3 class="text-lg font-semibold text-yellow-700 mb-3 uppercase tracking-wide">Expected Revenue</h3>
+            <h3 class="text-lg font-semibold text-yellow-700 mb-3 uppercase tracking-wide">Expected Revenue-Active</h3>
             <p class="text-4xl font-extrabold text-yellow-900">UGX {{ number_format($loanStats->total_balance_to_pay, 2) }}</p>
         </div>
 
     </div>
 
     <div class="p-6 bg-blue-50 rounded-lg shadow text-center mb-12">
-        <h3 class="text-lg font-semibold text-blue-700 mb-3 uppercase tracking-wide">Total Repayments (UGX)</h3>
+        <h3 class="text-lg font-semibold text-blue-700 mb-3 uppercase tracking-wide">Total Repayments (UGX) -Active</h3>
         <p class="text-4xl font-extrabold text-blue-900">UGX {{ number_format($totalRepayments, 2) }}</p>
     </div>
 
@@ -46,6 +46,7 @@
             use App\Models\Repayment;
 
             $expectedRevenue = Loan::where('status', 'active')->sum('balance_to_pay');
+      
             $repaymentsMade = Repayment::sum('amount');
             $balanceToCollect = $expectedRevenue - $repaymentsMade;
         @endphp
@@ -77,12 +78,24 @@
 
         @php
             use App\Models\SettledLoan;
+                  use App\Models\SettledRepayment;
             $receivables = SettledLoan::sum('balance_left');
+             $receivabledPaid = SettledRepayment::sum('amount');
+
         @endphp
 
         <p class="text-lg text-gray-700 font-semibold">
-            Total Receivables: <span class="text-green-600">UGX {{ number_format($receivables, 2) }}</span>
+            Total Receivables(Overdues): <span class="text-green-600">UGX {{ number_format($receivables, 2) }}</span>
         </p>
+        <p class="text-lg text-gray-700 font-semibold">
+            Total Receivables Paid(Overdues): <span class="text-green-600">UGX {{ number_format($receivabledPaid, 2) }}</span>
+<p class="text-lg text-gray-700 font-semibold">
+    Total Receivables (Overdues) To Be Collected:
+    <span class="text-red-600 font-bold">
+        UGX {{ number_format($receivables - $receivabledPaid, 2) }}
+    </span>
+</p>
+
     </section>
 
 </div>

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-@include('partials.success')
+
 
 <div class="w-full max-w-7xl mx-auto bg-white p-6 sm:p-8 rounded-lg shadow mt-6">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">Log a Client Repayment</h2>
-
+@include('partials.success')
     <form id="repaymentForm" method="POST" action="{{ route('repayments.store') }}" class="space-y-6">
         @csrf
 

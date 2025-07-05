@@ -39,15 +39,14 @@
     </form>
 
     <!-- Search Bar with Icon -->
- <div class="mb-6">
-    <form method="GET" action="{{ route('reports.repayments') }}" class="flex items-center space-x-2">
-        <input type="text" name="search" id="search" class="form-input rounded border-gray-300 mt-1" placeholder="Search by Client Name or Loan ID" value="{{ request('search') }}">
-        <button type="submit" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-3 py-2 rounded">
-            <i class="fas fa-search">filter</i>
-        </button>
-    </form>
-</div>
-
+    <div class="mb-6">
+        <form method="GET" action="{{ route('reports.repayments') }}" class="flex items-center space-x-2">
+            <input type="text" name="search" id="search" class="form-input rounded border-gray-300 mt-1" placeholder="Search by Client Name or Loan ID" value="{{ request('search') }}">
+            <button type="submit" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-3 py-2 rounded">
+                <i class="fas fa-search">filter</i>
+            </button>
+        </form>
+    </div>
 
     @if($reportData)
         <h3 class="text-lg font-semibold mb-4">
@@ -59,10 +58,15 @@
                 <p class="text-sm text-gray-600">Total Loans Given</p>
                 <p class="text-xl font-bold">UGX {{ number_format($reportData['total_loans']) }}</p>
             </div>
+
+            @php
+                $repaymentsMade = \App\Models\Repayment::sum('amount');
+            @endphp
             <div class="bg-gray-100 p-4 rounded shadow">
                 <p class="text-sm text-gray-600">Total Repayments</p>
-                <p class="text-xl font-bold text-green-600">UGX {{ number_format($reportData['total_repayments']) }}</p>
+                <p class="text-xl font-bold text-green-600">UGX {{ number_format($repaymentsMade) }}</p>
             </div>
+
             <div class="bg-gray-100 p-4 rounded shadow">
                 <p class="text-sm text-gray-600">Balance Due</p>
                 <p class="text-xl font-bold text-red-600">UGX {{ number_format($reportData['balance_due']) }}</p>
@@ -80,7 +84,7 @@
                         <th class="px-4 py-2">Amount Paid</th>
                         <th class="px-4 py-2">Date</th>
                         <th class="px-4 py-2">Note</th>
-                          <th class="px-4 py-2">Action</th>
+                        <th class="px-4 py-2">Action</th>
                     </tr>
                 </thead>
                 <tbody class="text-sm text-gray-700">
@@ -94,13 +98,13 @@
                             <td class="px-4 py-2">UGX {{ number_format($repayment->amount) }}</td>
                             <td class="px-4 py-2">{{ \Carbon\Carbon::parse($repayment->payment_date)->format('d M Y') }}</td>
                             <td class="px-4 py-2">{{ $repayment->note ?? '-' }}</td>
-                            <td class="px-4 py-2"><a href="{{ route('repayments.print', $repayment->id) }}" class="text-blue-500 hover:underline">Print</a>
-</td>
-
+                            <td class="px-4 py-2">
+                                <a href="{{ route('repayments.print', $repayment->id) }}" class="text-blue-500 hover:underline">Print</a>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center px-4 py-4 text-gray-500">
+                            <td colspan="6" class="text-center px-4 py-4 text-gray-500">
                                 No repayment records found for this period.
                             </td>
                         </tr>
