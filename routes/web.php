@@ -9,6 +9,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettledLoanController;
 use App\Http\Controllers\LoanFineController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminTrialController;
 use App\Http\Controllers\ArchivedSettledLoanController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\AttachmentController;
@@ -21,8 +22,17 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OtpVerificationController;
 use App\Http\Controllers\LoanInquiryController;
 use App\Http\Controllers\LoanController;
-// Public routes (like login, register, homepage)
-Route::get('/', [AdminController::class,  'welcome']);
+
+Route::middleware(['auth', 'check.trial'])->group(function () {
+    Route::get('/dashboard/view', [LogicController::class, 'view'])->name('view.dash');
+});
+
+// Route::middleware('auth', 'admin')->group(function () {
+   
+// });
+ Route::get('admin/renew-trial', [AdminTrialController::class, 'showRenewalForm'])->name('admin.renew-trial');
+    Route::post('admin/renew-trial', [AdminTrialController::class, 'renewTrial'])->name('admin.renew-trial.store');
+Route::get('/', [AdminController::class,  'welcome'])->name('wel');
 Route::get('/login', [AdminController::class,  'showLoginForm'])->name('login');
 Route::post('/login', [AdminController::class,  'login']);
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');

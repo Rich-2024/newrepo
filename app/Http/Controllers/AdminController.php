@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\OtpMail;
+use Carbon\Carbon;
 class AdminController extends Controller
 {
     public function dashboard(){
@@ -75,7 +76,7 @@ public function update(Request $request)
 
     // Handle profile picture upload
     if ($request->hasFile('profile_picture')) {
-        // Delete old profile picture if it exists
+       
         if ($user->profile_picture) {
             $oldPath = str_replace('/storage/', '', $user->profile_picture);
             if (\Illuminate\Support\Facades\Storage::disk('public')->exists($oldPath)) {
@@ -105,7 +106,38 @@ public function update(Request $request)
         return view('admin.login');
     }
 
-   public function login(Request $request)
+//    public function login(Request $request)
+// {
+//     $request->validate([
+//         'email' => 'required|email',
+//         'password' => 'required'
+//     ]);
+
+//     $remember = $request->has('remember');
+
+//     if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
+//         $request->session()->regenerate();
+
+//         // Generate OTP
+//         $otp = rand(100000, 999999);
+
+//         // Store OTP and user ID in session
+//         session(['otp' => $otp, 'otp_user_id' => Auth::id()]);
+
+//         // Send OTP to email
+//         Mail::to(Auth::user()->email)->send(new OtpMail($otp));
+
+//         // Logout immediately until verified
+//         Auth::logout();
+
+//         return redirect()->route('otp.verify.form')->with('success', 'OTP has been sent to your email.');
+//     }
+
+//     return back()->withErrors([
+//         'email' => 'The provided credentials do not match our records.',
+//     ])->onlyInput('email');
+// }
+public function login(Request $request)
 {
     $request->validate([
         'email' => 'required|email',
@@ -114,21 +146,42 @@ public function update(Request $request)
 
     $remember = $request->has('remember');
 
+    
     if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
-        $request->session()->regenerate();
+  
+        $user = Auth::user();
 
-        // Generate OTP
+       
+        if ($user->trial_end_date) {
+            
+            $trialEndDate = Carbon::parse($user->trial_end_date);
+
+            if ($trialEndDate->isPast()) {
+             
+                Auth::logout();
+                
+                            if ($user->is_trial_active) {
+                    $user->is_trial_active = false;
+                    $user->save();
+                }
+
+                return redirect()->route('price')->with('error', 'Your free trial has expired. Please upgrade to continue.');
+            }
+        }
+
+    
         $otp = rand(100000, 999999);
 
-        // Store OTP and user ID in session
+       
         session(['otp' => $otp, 'otp_user_id' => Auth::id()]);
 
-        // Send OTP to email
+     
         Mail::to(Auth::user()->email)->send(new OtpMail($otp));
 
-        // Logout immediately until verified
+     
         Auth::logout();
 
+     
         return redirect()->route('otp.verify.form')->with('success', 'OTP has been sent to your email.');
     }
 
@@ -136,6 +189,8 @@ public function update(Request $request)
         'email' => 'The provided credentials do not match our records.',
     ])->onlyInput('email');
 }
+
+
     public function logout(Request $request)
     {
         Auth::logout();

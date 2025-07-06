@@ -31,6 +31,39 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
           <span class="text-xl sm:text-2xl font-bold text-blue-600">FinanceHubTracker</span>
+        @if(session('success'))
+    <div id="flash-message" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div id="flash-message" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ session('error') }}
+    </div>
+@endif
+
+<script>
+    // Auto-hide flash message after 3 seconds (3000 ms)
+    setTimeout(() => {
+        const flash = document.getElementById('flash-message');
+        if (flash) {
+            // fade out effect (optional)
+            flash.style.transition = 'opacity 0.5s ease';
+            flash.style.opacity = '0';
+
+            // after fade out, remove from DOM
+            setTimeout(() => flash.remove(), 500);
+        }
+    }, 3000);
+</script>
+
+@if(session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ session('error') }}
+    </div>
+@endif
+
           <!-- Hamburger -->
           <button id="nav-toggle" class="md:hidden text-gray-700 mr-4 focus:outline-none" aria-label="Toggle menu" aria-expanded="false">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -159,5 +192,6 @@
       }
     });
   </script>
+  @include('footer')
 </body>
 </html>

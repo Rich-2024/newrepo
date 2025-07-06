@@ -63,7 +63,7 @@ use App\Models\Loan;
 use App\Models\SettledLoan;
 use App\Models\LoanCommandLog;
 use Carbon\Carbon;
-
+use Artisan;
 class ProcessExpiredLoans extends Command
 {
     // Accept a user ID as input
@@ -89,7 +89,7 @@ class ProcessExpiredLoans extends Command
 
         $this->info("⏳ Checking for expired loans for user ID: $userId");
 
-        // Step 1: Mark expired loans as inactive
+        //  Mark expired loans as inactive
         $expiredLoans = Loan::where('user_id', $userId)
             ->where('status', 'active')
             ->where('end_date', '<', Carbon::now())
@@ -102,7 +102,7 @@ class ProcessExpiredLoans extends Command
 
         $this->info("✅ Updated {$expiredLoans->count()} expired loan(s) to inactive.");
 
-        // Step 2: Move inactive loans to SettledLoan
+        //  Move inactive loans to SettledLoan
         $inactiveLoans = Loan::where('user_id', $userId)
             ->where('status', 'inactive')
             ->get();
@@ -128,11 +128,11 @@ class ProcessExpiredLoans extends Command
 
         $this->info("✅ Moved {$inactiveLoans->count()} inactive loan(s) to settled for user ID: $userId.");
 
-        // Step 3: Log the command run
         LoanCommandLog::updateOrCreate(
             ['user_id' => $userId],
             ['last_ran_on' => $today]
         );
+                Artisan::call('update:trial-status');
     }
 }
 

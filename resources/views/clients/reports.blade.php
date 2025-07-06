@@ -59,9 +59,12 @@
                 <p class="text-xl font-bold">UGX {{ number_format($reportData['total_loans']) }}</p>
             </div>
 
-            @php
-                $repaymentsMade = \App\Models\Repayment::sum('amount');
-            @endphp
+        @php
+$repaymentsMade = \App\Models\Repayment::whereHas('loan', function ($query) {
+    $query->where('user_id', auth()->id());
+})->sum('amount');
+@endphp
+
             <div class="bg-gray-100 p-4 rounded shadow">
                 <p class="text-sm text-gray-600">Total Repayments</p>
                 <p class="text-xl font-bold text-green-600">UGX {{ number_format($repaymentsMade) }}</p>
