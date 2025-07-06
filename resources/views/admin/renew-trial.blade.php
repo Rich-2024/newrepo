@@ -21,17 +21,7 @@
   <div class="container mx-auto py-12 px-6">
 
     <!-- Display success or error messages -->
-    @if(session('success'))
-        <div class="alert alert-success bg-green-500 text-white p-4 rounded-lg mb-6">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger bg-red-500 text-white p-4 rounded-lg mb-6">
-            {{ session('error') }}
-        </div>
-    @endif
+@include('partials.success')
 
     <!-- User Table (Showing users and their trial details) -->
     <div class="overflow-x-auto mb-8">

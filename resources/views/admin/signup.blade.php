@@ -27,7 +27,7 @@
 
       <div class="text-center mb-8">
         <h2 class="text-3xl font-bold text-gray-800 mb-2">Create Account</h2>
-        <p class="text-gray-600">Please fill in the details to sign up</p>
+        <p class="text-gray-600">Please fill in the details to sign up,your're currently in free Trial</p>
       </div>
 
       @if ($errors->any())

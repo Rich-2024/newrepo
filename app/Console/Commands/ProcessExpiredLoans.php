@@ -72,6 +72,7 @@ class ProcessExpiredLoans extends Command
 
     public function handle()
     {
+          Artisan::call('update:trial-status');
    LoanCommandLog::where('last_ran_on', '<', now()->subDays(30))->delete();
 
         $userId = $this->argument('user_id');
@@ -132,7 +133,7 @@ class ProcessExpiredLoans extends Command
             ['user_id' => $userId],
             ['last_ran_on' => $today]
         );
-                Artisan::call('update:trial-status');
+              
     }
 }
 
