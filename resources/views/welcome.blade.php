@@ -115,29 +115,137 @@
     </section>
 
     <!-- Features Section -->
-    <section class="bg-white/95 py-24 px-4">
-      <div class="max-w-7xl mx-auto text-center mb-16">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">Our Financial Solutions Tracking System</h2>
-        <p class="mt-4 text-sm sm:text-base md:text-lg text-gray-600">Choose from our range of tailored financial Loan Tracker</p>
-      </div>
-      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 px-4">
-        <!-- Feature cards... -->
-        <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-200"><!-- content --></div>
-        <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-200"><!-- content --></div>
-        <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-200"><!-- content --></div>
-      </div>
-    </section>
+   <section class="bg-white/95 py-24 px-4">
+  <div class="max-w-7xl mx-auto text-center mb-16">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">Our Financial Solutions Tracking System</h2>
+    <p class="mt-4 text-sm sm:text-base md:text-lg text-gray-600">
+      Choose from our range of tailored financial Loan Tracker tools designed for visibility, control, and growth.
+    </p>
+  </div>
 
-    <!-- Testimonials Section -->
-    <section class="bg-gray-50/95 py-24 px-4">
-      <div class="max-w-7xl mx-auto text-center mb-16">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">What Our Clients Say</h2>
-        <p class="mt-4 text-sm sm:text-base md:text-lg text-gray-600">Real feedback from our loan management users</p>
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 px-4">
+
+    <!-- Card 1: Loan Status Tracker -->
+    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-200">
+      <div class="mb-4">
+        <img src="https://img.icons8.com/color/96/graph-report.png" alt="Loan Status" class="w-14 h-14">
       </div>
-      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
-        <!-- Testimonials... -->
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">Loan Status Tracker</h3>
+      <p class="text-gray-600 text-sm">
+        Instantly view the lifecycle of every loan — from application to disbursement and repayment. Stay on top of every client’s progress.
+      </p>
+    </div>
+
+    <!-- Card 2: Repayment Monitoring -->
+    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-200">
+      <div class="mb-4">
+        <img src="https://images.pexels.com/photos/47344/dollar-currency-money-us-dollar-47344.jpeg" alt="Repayment Monitoring" class="w-14 h-14">
       </div>
-    </section>
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">Repayment Monitoring</h3>
+      <p class="text-gray-600 text-sm">
+        Track due dates, receive alerts for missed payments, and automate reminders to clients — ensuring your collections are always on point.
+      </p>
+    </div>
+
+    <!-- Card 3: Real-Time Analytics -->
+    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-200">
+      <div class="mb-4">
+        <img src="https://img.icons8.com/color/96/combo-chart--v1.png" alt="Analytics" class="w-14 h-14">
+      </div>
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">Real-Time Analytics</h3>
+      <p class="text-gray-600 text-sm">
+        Access powerful dashboards that show loan performance, risk exposure, branch metrics, and financial health — all updated in real time.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+   <!-- Testimonials Section -->
+<section class="bg-gray-50/95 py-24 px-4">
+  <div class="max-w-7xl mx-auto text-center mb-16">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">What Our Clients Say</h2>
+    <p class="mt-4 text-sm sm:text-base md:text-lg text-gray-600">Real feedback from our loan management users</p>
+  </div>
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+
+    <!-- Testimonial 1 -->
+    <div class="bg-white rounded-lg shadow p-6 text-left">
+      <img class="rounded-md mb-4 w-full h-40 object-cover" src="https://images.pexels.com/photos/4475523/pexels-photo-4475523.jpeg" alt="African woman using laptop">
+      <p class="text-gray-700 italic">"Managing client loans used to be a nightmare. With this system, we track repayments easily and stay compliant."</p>
+      <div class="mt-6 flex items-center">
+        <img class="w-12 h-12 rounded-full mr-4" src="https://images.pexels.com/photos/31485662/pexels-photo-31485662.jpeg" alt="Amina K.">
+        <div>
+          <p class="text-sm font-semibold text-gray-900">Amina K.</p>
+          <p class="text-xs text-gray-500">Loan Manager, Uganda Microfinance</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonial 2 -->
+    <div class="bg-white rounded-lg shadow p-6 text-left">
+      <img class="rounded-md mb-4 w-full h-40 object-cover" src="https://images.pexels.com/photos/7948060/pexels-photo-7948060.jpeg" alt="African man in office">
+      <p class="text-gray-700 italic">"This tool gave us full visibility into loan performance. It's easy to use and fits our workflows perfectly."</p>
+      <div class="mt-6 flex items-center">
+        <img class="w-12 h-12 rounded-full mr-4" src="https://randomuser.me/api/portraits/men/77.jpg" alt="Samuel T.">
+        <div>
+          <p class="text-sm font-semibold text-gray-900">Samuel T.</p>
+          <p class="text-xs text-gray-500">Finance Director, kampala Credit Union</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonial 3 -->
+    <div class="bg-white rounded-lg shadow p-6 text-left">
+      <img class="rounded-md mb-4 w-full h-40 object-cover" src="https://images.pexels.com/photos/7191994/pexels-photo-7191994.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt="African woman in a meeting">
+      <p class="text-gray-700 italic">"From approval to disbursement and monitoring — everything is streamlined. This system gave us control."</p>
+      <div class="mt-6 flex items-center">
+        <img class="w-12 h-12 rounded-full mr-4" src="https://randomuser.me/api/portraits/women/83.jpg" alt="Ngozi E.">
+        <div>
+          <p class="text-sm font-semibold text-gray-900">Ngozi E.</p>
+          <p class="text-xs text-gray-500">Branch Officer, Lagos Lending Hub</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Admin Dashboard Section -->
+<section class="bg-gray-100 py-24 px-4">
+  <div class="max-w-7xl mx-auto text-center mb-16">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">Admin Dashboard</h2>
+    <p class="mt-4 text-sm sm:text-base md:text-lg text-gray-600">
+      Powerful tools to manage loans, monitor performance, and stay compliant — all in one place.
+    </p>
+  </div>
+
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
+    <!-- Screenshot or illustration -->
+    <img src="https://images.pexels.com/photos/5816307/pexels-photo-5816307.jpeg" alt="Admin Dashboard" class="w-full md:w-1/2 rounded-lg shadow-md object-cover">
+
+    <!-- Features -->
+    <div class="w-full md:w-1/2 space-y-6 text-left">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800">🎯 Centralized Loan Management</h3>
+        <p class="text-gray-600 text-sm">Track all loans, repayments, and customer statuses in real time.</p>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800">📊 Real-Time Reports</h3>
+        <p class="text-gray-600 text-sm">Generate performance, compliance, and audit reports with a click.</p>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800">🛡️ Role-Based Access</h3>
+        <p class="text-gray-600 text-sm">Secure access for staff with different permission levels (Admin, Officer, Auditor).</p>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800">🔔 Automated Notifications</h3>
+        <p class="text-gray-600 text-sm">Get alerts on overdue payments, new applications, or suspicious activity.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
     <!-- Contact Section -->
     <section class="bg-white/95 py-24 px-4">
