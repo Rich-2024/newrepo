@@ -66,7 +66,7 @@
 
         <p>Get started now and explore all the features of LoanHubTracker!</p>
 
-        <a href="https://custohost.custospark.com/" class="btn">Start Now</a>
+        <a href="https://financehubtracker.custospark.com/" class="btn">Start Now</a>
 
         <footer>
             <p>Best regards, <br> The LoanHubTracker Team</p>

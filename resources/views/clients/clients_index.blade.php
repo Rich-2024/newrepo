@@ -1,48 +1,73 @@
 @extends('layouts.app')
 
-
 @section('content')
-<div class="container mx-auto px-4 py-6 mt-5">
+<div class="container mx-auto px-4 py-8 mt-6">
     @include('partials.success')
-    <h2 class="text-2xl font-bold mb-6 text-center text-blue-700">Loan Issued Clients</h2>
 
-    <!-- Search -->
-    <form method="GET" action="{{ route('loans.clients.index') }}" class="mb-6 max-w-md mx-auto">
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Search client by name..."
-            class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:border-blue-300">
+    <!-- Page Header -->
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-blue-700">Loan Issued Clients</h2>
+        <p class="text-gray-500 mt-2">Manage your client loans and attachments here.</p>
+    </div>
+
+    <!-- Search Form -->
+    <form method="GET" action="{{ route('loans.clients.index') }}" class="max-w-lg mx-auto mb-6">
+        <div class="flex items-center space-x-3">
+            <input
+                type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Search client by name..."
+                class="flex-grow px-4 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+            <button type="submit" class="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 shadow">
+                Search
+            </button>
+
+            @if(request('search'))
+                <a href="{{ route('loans.clients.index') }}"
+                   class="px-5 py-2 bg-gray-100 text-gray-800 border border-gray-300 rounded hover:bg-gray-200 hover:text-black transition duration-150 shadow">
+                    ✕ Reset
+                </a>
+            @endif
+        </div>
     </form>
 
-    <!-- Clients & Loans Table -->
-    <div class="overflow-x-auto bg-white shadow rounded">
-        <table class="min-w-full table-auto">
-            <thead class="bg-gray-100 text-gray-700 text-sm">
+    <!-- Loans Table -->
+    <div class="bg-white shadow-md rounded overflow-x-auto">
+        <table class="min-w-full text-sm text-gray-800">
+            <thead class="bg-blue-50 text-gray-700 uppercase text-xs">
                 <tr>
-                    <th class="px-4 py-3 text-left">Client Name</th>
-                    <th class="px-4 py-3 text-left">Loan Amount</th>
-                    <th class="px-4 py-3 text-left">Issued On</th>
-                    <th class="px-4 py-3 text-left">Actions</th>
+                    <th class="px-6 py-4 text-left">Client Name</th>
+                    <th class="px-6 py-4 text-left">Loan Amount</th>
+                    <th class="px-6 py-4 text-left">Issued On</th>
+                    <th class="px-6 py-4 text-left">Ends On</th>
+                    <th class="px-6 py-4 text-left">Actions</th>
                 </tr>
             </thead>
-            <tbody class="text-sm text-gray-700 divide-y">
+            <tbody class="divide-y divide-gray-200">
                 @forelse($loans as $loan)
-                    <tr>
-                        <td class="px-4 py-3">{{ $loan->name }}</td>
-                        <td class="px-4 py-3">UGX {{ number_format($loan->amount) }}</td>
-                        <td class="px-4 py-3">{{ \Carbon\Carbon::parse($loan->created_at)->format('d M Y') }}</td>
-                        <td class="px-4 py-3 space-x-2">
-                            <a href="{{ route('loans.printIssuance', $loan->id) }}" target="_blank"
-                               class="text-blue-600 hover:underline">Print</a>
-
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 font-medium">{{ $loan->name }}</td>
+                        <td class="px-6 py-4">UGX {{ number_format($loan->amount) }}</td>
+                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($loan->loan_date)->format('d M Y') }}</td>
+                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($loan->end_date)->format('d M Y') }}</td>
+                        <td class="px-6 py-4 space-x-4">
                             <a href="{{ route('attachments.upload', $loan->id) }}"
-                               class="text-green-600 hover:underline">Upload</a>
-
+                               class="text-green-600 hover:underline font-medium">Upload</a>
                             <a href="{{ route('attachments.view', $loan->id) }}"
-                               class="text-yellow-600 hover:underline">View</a>
+                               class="text-yellow-600 hover:underline font-medium">View</a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center py-4 text-gray-500">No clients found.</td>
+                        <td colspan="5" class="px-6 py-6 text-center text-gray-500">
+                            @if(request('search'))
+                                No results found for "<strong>{{ request('search') }}</strong>".
+                            @else
+                                No clients found.
+                            @endif
+                        </td>
                     </tr>
                 @endforelse
             </tbody>
@@ -50,7 +75,7 @@
     </div>
 
     <!-- Pagination -->
-    <div class="mt-6">
+    <div class="mt-8 flex justify-center">
         {{ $loans->appends(request()->query())->links() }}
     </div>
 </div>

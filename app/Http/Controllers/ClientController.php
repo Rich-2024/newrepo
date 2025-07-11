@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\InterestSetup;
 use App\Models\SettledLoan;
 use Carbon\Carbon;
+use App\Models\CopyLoan;
 
 
 class ClientController extends Controller
@@ -91,7 +92,7 @@ public function create(Request $request)
 
     if (count($loanData) > 0) {
         Loan::insert($loanData);
-
+      CopyLoan::insert($loanData);
         // Update any expired loans and move inactive ones to settled
         $this->updateLoanStatusIfExpired();
         $this->moveInactiveLoansToSettled();
@@ -222,7 +223,7 @@ private function updateLoanStatusIfExpired()
     $currentDate = Carbon::now();
 
     //Find all loans where the end date has passed and the loan is still active
-    $loans = Loan::where('status', 'active') // Assuming active status means loan is still running
+    $loans = Loan::where('status', 'active')
                  ->where('end_date', '<', $currentDate)
                  ->get();
 

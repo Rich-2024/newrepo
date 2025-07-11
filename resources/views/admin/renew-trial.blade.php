@@ -11,11 +11,21 @@
 <body class="bg-gray-100 font-sans">
 
   <!-- Header -->
-  <header class="bg-blue-900 text-white p-5 shadow-md sticky top-0 z-50">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Admin Panel</h1>
-    </div>
-  </header>
+ <!-- Header -->
+<header class="bg-blue-900 text-white p-5 shadow-md sticky top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Admin Panel</h1>
+
+    <!-- Logout Button -->
+    <form method="POST" action="{{ route('logout') }}">
+      @csrf
+      <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
+        Logout
+      </button>
+    </form>
+  </div>
+</header>
+
 
   <!-- Main Content -->
   <div class="container mx-auto py-12 px-6">
@@ -64,7 +74,7 @@
                 <option value="">-- Select a User --</option>
                 @foreach($users as $user)
                     <option value="{{ $user->id }}">
-                        {{ $user->name }} ({{ $user->email }}) 
+                        {{ $user->name }} ({{ $user->email }})
                     </option>
                 @endforeach
             </select>

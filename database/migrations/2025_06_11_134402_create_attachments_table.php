@@ -9,16 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-  public function up()
+
+public function up()
 {
     Schema::create('attachments', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('loan_id')->constrained()->onDelete('cascade');
+
+      
+        $table->foreignId('copy_loan_id')->constrained('copy_loans')->onDelete('cascade');
+
         $table->string('file_name');
         $table->string('file_path');
         $table->timestamps();
     });
 }
+
 
 
     /**

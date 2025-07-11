@@ -15,9 +15,13 @@ class Attachment extends Model
         'file_path',
     ];
 
-    public function loan()
-    {
-        return $this->belongsTo(Loan::class);
-    }
+ public function copyLoan()
+{
+    return $this->belongsTo(CopyLoan::class, 'copy_loan_id');
+}
+
+
+
+
 }
 

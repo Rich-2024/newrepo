@@ -28,7 +28,7 @@ Route::middleware(['auth', 'check.trial'])->group(function () {
 });
 
 // Route::middleware('auth', 'admin')->group(function () {
-   
+
 // });
  Route::get('admin/renew-trial', [AdminTrialController::class, 'showRenewalForm'])->name('admin.renew-trial');
     Route::post('admin/renew-trial', [AdminTrialController::class, 'renewTrial'])->name('admin.renew-trial.store');
@@ -54,6 +54,7 @@ Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])-
 Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 // Protect all other routes with auth middleware
 Route::middleware('auth')->group(function () {
+ Route::get('admin/renew-trial', [AdminTrialController::class, 'showRenewalForm'])->name('admin.renew-trial');
 
     Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 
@@ -101,6 +102,8 @@ Route::delete('/archived-settled-loans/{id}', [ArchivedSettledLoanController::cl
     Route::get('/loans/{loanId}/attachments/upload', [AttachmentController::class, 'create'])->name('attachments.upload');
     Route::post('/loans/{loanId}/attachments', [AttachmentController::class, 'store'])->name('attachments.store');
 Route::post('/profile/upload-picture', [AdminController::class, 'uploadPicture'])->name('profile.uploadPicture');
+    Route::get('/attachments/{id}/download', [AttachmentController::class, 'download'])->name('attachments.download');
+    Route::delete('/attachments/{id}', [AttachmentController::class, 'destroy'])->name('attachments.destroy');
 
 
 Route::post('/update-fine-status/{loan}', [LoanFineController::class, 'updateFineStatus'])->name('loan.updateFineStatus');

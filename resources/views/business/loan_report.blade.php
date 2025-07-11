@@ -32,11 +32,11 @@
         <p class="text-4xl font-extrabold text-blue-900">UGX {{ number_format($totalRepayments, 2) }}</p>
     </div>
 
- <section class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md mb-12 border border-gray-200">
+<section class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md mb-12 border border-gray-200">
     <h3 class="text-2xl font-semibold text-gray-900 mb-6 border-b border-gray-300 pb-3 flex items-center gap-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 12a9 9 0 11-9 9 9 9 0 019-9z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none" />
         </svg>
         Balance to be Collected
     </h3>
@@ -45,22 +45,21 @@
         use App\Models\Loan;
         use App\Models\Repayment;
 
-        $userId = auth()->id(); // get current logged-in user id
+        $userId = auth()->id();
 
-        // Sum of balance to pay on active loans belonging to user
         $expectedRevenue = Loan::where('user_id', $userId)
-                              ->where('status', 'active')
-                              ->sum('balance_to_pay');
+                               ->where('status', 'active')
+                               ->sum('balance_to_pay');
 
-        // Sum of repayments made on loans belonging to user
         $repaymentsMade = Repayment::whereHas('loan', function ($query) use ($userId) {
             $query->where('user_id', $userId);
         })->sum('amount');
 
         $balanceToCollect = $expectedRevenue - $repaymentsMade;
+        $expectedProfit = $balanceToCollect - ($loanStats->total_loan_amount ?? 0);
     @endphp
 
-    <dl class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-700 text-lg font-medium">
+    <dl class="grid grid-cols-1 md:grid-cols-4 gap-6 text-gray-700 text-lg font-medium">
         <div>
             <dt class="uppercase tracking-wide text-gray-600 mb-1">Expected Revenue</dt>
             <dd class="text-blue-700 font-bold">UGX {{ number_format($expectedRevenue, 2) }}</dd>
@@ -72,6 +71,10 @@
         <div>
             <dt class="uppercase tracking-wide text-gray-600 mb-1">Balance to Collect</dt>
             <dd class="text-red-700 font-extrabold text-xl">UGX {{ number_format($balanceToCollect, 2) }}</dd>
+        </div>
+        <div>
+            <dt class="uppercase tracking-wide text-gray-600 mb-1">Expected Profit</dt>
+            <dd class="text-purple-700 font-extrabold text-xl">UGX {{ number_format($expectedProfit, 2) }}</dd>
         </div>
     </dl>
 </section>

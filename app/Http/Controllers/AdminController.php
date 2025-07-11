@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Loan;
+use App\Models\CopyLoan;
     use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use App\Models\User;
@@ -76,7 +77,7 @@ public function update(Request $request)
 
     // Handle profile picture upload
     if ($request->hasFile('profile_picture')) {
-       
+
         if ($user->profile_picture) {
             $oldPath = str_replace('/storage/', '', $user->profile_picture);
             if (\Illuminate\Support\Facades\Storage::disk('public')->exists($oldPath)) {
@@ -146,20 +147,20 @@ public function login(Request $request)
 
     $remember = $request->has('remember');
 
-    
+
     if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $remember)) {
-  
+
         $user = Auth::user();
 
-       
+
         if ($user->trial_end_date) {
-            
+
             $trialEndDate = Carbon::parse($user->trial_end_date);
 
             if ($trialEndDate->isPast()) {
-             
+
                 Auth::logout();
-                
+
                             if ($user->is_trial_active) {
                     $user->is_trial_active = false;
                     $user->save();
@@ -169,19 +170,19 @@ public function login(Request $request)
             }
         }
 
-    
+
         $otp = rand(100000, 999999);
 
-       
+
         session(['otp' => $otp, 'otp_user_id' => Auth::id()]);
 
-     
+
         Mail::to(Auth::user()->email)->send(new OtpMail($otp));
 
-     
+
         Auth::logout();
 
-     
+
         return redirect()->route('otp.verify.form')->with('success', 'OTP has been sent to your email.');
     }
 
@@ -199,20 +200,20 @@ public function login(Request $request)
 
         return redirect('/')->with('success',"You're loggedout ");
     }
-   public function clientsIndex(Request $request)
+ public function clientsIndex(Request $request)
 {
-    $search = $request->input('search');
     $userId = Auth::id();
+    $search = $request->input('search');
 
-    $loans = Loan::query()
-        ->where('user_id', $userId)
+    $loans = CopyLoan::where('user_id', $userId)
         ->when($search, function ($query, $search) {
-            $query->where('name', 'like', "%$search%");
+            $query->where('name', 'like', '%' . $search . '%');
         })
         ->orderByDesc('created_at')
-        ->paginate(10);
+        ->paginate(10)
+        ->withQueryString();
 
-    return view('clients.clients_index', compact('loans'));
+    return view('clients.clients_index', compact('loans', 'search'));
 }
 
 }
