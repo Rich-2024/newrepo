@@ -23,13 +23,19 @@
       background-size: 200% auto;
       background-position: 0% center;
     }
+
+    .btn-clicked {
+      transform: translateY(2px);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      background-color: #2563eb; /* Slightly darker blue */
+    }
   </style>
 </head>
 
 <body class="min-h-screen animate-slide-background">
 
   <div class="min-h-screen flex items-center justify-center px-4 backdrop-blur-[2px] bg-black/30">
-    <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-2xl">
+    <div class="max-w-md w-full bg-white p-8 rounded-xl shadow-2xl">
 
       <!-- Heading -->
       <div class="text-center mb-8">
@@ -60,22 +66,62 @@
             required>
         </div>
 
-        <button type="submit"
-          class="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200">
+        <button id="verifyBtn" type="submit"
+          class="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-semibold shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200">
           Verify OTP
         </button>
       </form>
 
       <!-- Resend -->
-      <form method="POST" action="{{ route('otp.resend') }}" class="mt-4 text-center">
-        @csrf
-        <button type="submit" class="text-sm text-blue-600 hover:text-blue-800 underline">
-          Resend OTP
-        </button>
-      </form>
+   <form method="POST" action="{{ route('otp.resend') }}" class="mt-4 text-center">
+  @csrf
+  <button
+    type="submit"
+    id="resendBtn"
+    class="text-sm text-blue-600 hover:text-blue-800 underline transition duration-150">
+    Resend OTP
+  </button>
+</form>
+
+<style>
+  .btn-clicked {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.15s ease;
+  }
+</style>
+<script>
+  const resendBtn = document.getElementById('resendBtn');
+
+  resendBtn.addEventListener('click', function () {
+    resendBtn.classList.add('btn-clicked');
+    setTimeout(() => {
+      resendBtn.classList.remove('btn-clicked');
+    }, 150); // Effect lasts 150ms
+  });
+</script>
 
     </div>
   </div>
+
+  <!-- Optional: Simulate button click visual effect -->
+  <script>
+    const button = document.getElementById('verifyBtn');
+
+    // Simulate visual click effect (optional, or can be used on real click)
+    button.addEventListener('click', function () {
+      button.classList.add('btn-clicked');
+      setTimeout(() => {
+        button.classList.remove('btn-clicked');
+      }, 150); // Return to normal after 150ms
+    });
+
+    // To auto-show it as clicked on page load (optional, demo purpose)
+    // window.addEventListener('load', () => {
+    //   button.classList.add('btn-clicked');
+    //   setTimeout(() => button.classList.remove('btn-clicked'), 150);
+    // });
+  </script>
 
 </body>
 </html>

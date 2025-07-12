@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 
  <div class="mb-4 mt-6 sm:mb-0 sm:mt-8 md:mb-8 md:mt-10 lg:mb-10 lg:mt-12">

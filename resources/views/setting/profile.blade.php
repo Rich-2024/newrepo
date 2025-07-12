@@ -172,6 +172,24 @@
                 </div>
             </form>
         </div>
+        <style>
+    .fade-out {
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+    }
+</style>
+
+<script>
+    setTimeout(() => {
+        ['auth-error', 'success-message', 'error-message', 'validation-errors'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.add('fade-out');
+            }
+        });
+    }, 3000);
+</script>
+
 
         <!-- JS to trigger file input -->
         <script>
