@@ -68,8 +68,8 @@
     <div class="container">
         <h1>Your Account Access Period Has Been Renewed</h1>
         <p>Hello <span class="highlight">{{ $user->admin_name }}</span>,</p>
-        <p>Good news! Your Acess has been renewed successfully. Your new trial end date is <strong>{{ $newTrialEndDate->format('F j, Y') }}</strong>.</p>
-        <p>Enjoy your extended trial period! We're excited to have you continue with us.</p>
+        <p>Good news! Your Acess has been renewed successfully. Your new Access end date is <strong>{{ $newTrialEndDate->format('F j, Y') }}</strong>.</p>
+        <p>Enjoy your extended Access period! We're excited to have you continue with us.</p>
         <a href="https://financehubtracker.custospark.com" class="button">Explore Your Dashboard</a>
         <p class="footer">Best regards,<br>FinanceHubTracker Team</p>
     </div>
