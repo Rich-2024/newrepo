@@ -207,3 +207,4 @@ Route::get('/loan-report', [LoanController::class, 'report'])->name('loan.report
 
 Route::get('/loan-inquiry', [LoanInquiryController::class, 'showForm'])->name('loan.inquiry');
 Route::post('/loan-inquiry', [LoanInquiryController::class, 'submit'])->name('loan.inquiry.submit');
+Route::get('/terms', [ViewController::class, 'terms'])->name('terms');

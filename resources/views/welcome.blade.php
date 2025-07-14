@@ -98,7 +98,7 @@
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 animate-fade-in">Financial Solutions for Your Future</h1>
         <p class="text-sm sm:text-base md:text-lg text-white/90 mb-12 max-w-3xl mx-auto">Unlock your financial potential with our comprehensive loan Tracker solutions. We provide personalized financial tailored system to your needs and accessible online everywhere you go.</p>
         <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6">
-          <a href="{{ route('register') }}" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-base sm:text-lg font-semibold hover:bg-blue-700 transition duration-200">Get Started</a>
+          <a href="{{ route('terms') }}" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-base sm:text-lg font-semibold hover:bg-blue-700 transition duration-200">Get Started</a>
           <a href="{{ route('login') }}" class="bg-blue-600 text-white px-8 py-4 rounded-lg text-base sm:text-lg font-semibold hover:bg-blue-700 transition duration-200">Login</a>
         </div>
       </div>

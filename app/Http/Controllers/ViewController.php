@@ -15,6 +15,11 @@ class ViewController extends Controller
     public function dashboard(){
         return view('layouts.dashboard');
     }
+    public function terms()
+{
+    return view('business.terms-and-conditions');
+}
+
     public function create()
     {
         return view('clients.create');

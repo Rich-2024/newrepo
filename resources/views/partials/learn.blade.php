@@ -88,7 +88,7 @@
   <section id="trial" class="py-20 text-center bg-white px-4">
     <h2 class="text-3xl font-bold text-blue-900">Try FinanceHubTracker Free</h2>
     <p class="text-gray-600 mt-4 mb-6">Start your  free  trials today and experience smart loan management.</p>
-    <a href="{{ route('login') }}" class="inline-block bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition">Start Now</a>
+    <a href="{{ route('terms') }}" class="inline-block bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition">Start Now</a>
   </section>
 
   <!-- Footer -->
