@@ -23,8 +23,14 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-        Schema::dropIfExists('settings');
-    }
+public function down()
+{
+    Schema::table('settings', function (Blueprint $table) {
+        if (Schema::hasColumn('settings', 'user_id')) {
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        }
+    });
+}
+
 };

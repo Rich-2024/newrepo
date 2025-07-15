@@ -15,7 +15,7 @@ public function up()
     Schema::create('attachments', function (Blueprint $table) {
         $table->id();
 
-      
+
         $table->foreignId('copy_loan_id')->constrained('copy_loans')->onDelete('cascade');
 
         $table->string('file_name');

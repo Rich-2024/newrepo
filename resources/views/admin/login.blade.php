@@ -96,8 +96,9 @@
           class="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
           Sign In
         </button>
-        <a href="/" style="text-align:center;">back</a>
-      </form>
+ <a href="/" class="block text-center text-sm text-blue-600 hover:text-blue-800 mt-4">
+          Back to Home
+        </a>      </form>
 
     </div>
   </div>

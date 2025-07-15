@@ -89,7 +89,7 @@
         Join hundreds of smart businesses already using FinanceHubTracker to simplify their loan processes and improve cash flow.
       </p>
      <div class="text-center mt-6 text-sm text-gray-600">
-  By clicking <strong>Start</strong>, you agree to our
+  By clicking <strong> Start Now</strong>, you agree to our
   <a href="{{ route('terms') }}" class="text-blue-700 underline hover:text-blue-900">Terms & Conditions</a>.
 </div>
 
