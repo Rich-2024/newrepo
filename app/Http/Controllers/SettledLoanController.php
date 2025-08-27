@@ -10,13 +10,13 @@ class SettledLoanController extends Controller
 {
     public function index(Request $request)
     {
-        $userId = Auth::id(); // 👈 Ensure we're filtering by logged-in user
+        $userId = Auth::id();
 
         $month  = $request->input('month');
         $year   = $request->input('year');
         $client = trim($request->input('client'));
 
-        $query = SettledLoan::where('user_id', $userId); 
+        $query = SettledLoan::where('user_id', $userId);
 
         if (!empty($month) && is_numeric($month) && $month >= 1 && $month <= 12) {
             $query->whereMonth('settled_at', intval($month));
@@ -45,8 +45,7 @@ class SettledLoanController extends Controller
     {
         $userId = Auth::id();
 
-        $loan = SettledLoan::where('id', $id)->where('user_id', $userId)->firstOrFail(); // 👈 Only delete if it belongs to user
-
+        $loan = SettledLoan::where('id', $id)->where('user_id', $userId)->firstOrFail();
         $clientName = $loan->name;
         $loan->delete();
 

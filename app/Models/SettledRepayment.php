@@ -20,5 +20,13 @@ public function settledLoan()
 {
     return $this->belongsTo(SettledLoan::class, 'settled_loan_id');
 }
+public function loan()
+{
+    return $this->belongsTo(SettledLoan::class, 'settled_loan_id');
+}
+public function editLogs()
+{
+    return $this->hasMany(RepaymentEditLog::class, 'repayment_id');
+}
 
 }

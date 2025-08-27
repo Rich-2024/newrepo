@@ -6,6 +6,8 @@ use App\Models\Loan;
 use App\Models\SettledLoan;
 use App\Models\InterestSetup;
 use App\Models\Repayment;
+use App\Models\SettledRepayment;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -160,4 +162,19 @@ class ReportController extends Controller
             return back()->with('error', 'An error occurred while generating the PDF report.');
         }
     }
+    public function update(Request $request, SettledRepayment $repayment)
+{
+    $validated = $request->validate([
+        'amount' => 'required|numeric|min:0',
+        'payment_date' => 'required|date',
+        'note' => 'nullable|string|max:255',
+    ]);
+
+    // Optional: Log changes here...
+
+    $repayment->update($validated);
+
+    return redirect()->back()->with('success', 'Repayment updated successfully.');
+}
+
 }

@@ -2,10 +2,11 @@
 
 @section('content')
 
-
 <div class="w-full max-w-7xl mx-auto bg-white p-6 sm:p-8 rounded-lg shadow mt-6">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">Log a Client Repayment</h2>
-@include('partials.success')
+
+    @include('partials.success')
+
     <form id="repaymentForm" method="POST" action="{{ route('repayments.store') }}" class="space-y-6">
         @csrf
 
@@ -17,14 +18,14 @@
                 <option value="">-- Choose Client --</option>
                 @foreach($loans as $loan)
                     <option value="{{ $loan->id }}">{{ $loan->name }} - {{ $loan->contact }}</option>
-                @endforeach 
+                @endforeach
             </select>
         </div>
 
         {{-- Amount --}}
         <div>
             <label for="amount" class="block text-sm font-medium text-gray-700">Amount Paid</label>
-            <input type="number" name="amount" id="amount" required
+            <input type="text" name="amount" id="amount" required
                 class="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" />
         </div>
 
@@ -72,11 +73,11 @@
         </div>
 
         <div class="mt-6 flex flex-col sm:flex-row justify-end gap-3">
-            <button onclick="closeRepaymentReviewModal()" 
+            <button onclick="closeRepaymentReviewModal()"
                     class="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded text-sm font-medium transition">
                 Cancel
             </button>
-            <button onclick="confirmRepaymentSubmission()" 
+            <button onclick="confirmRepaymentSubmission()"
                     class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded text-sm font-medium transition">
                 Confirm Repayment
             </button>
@@ -84,24 +85,65 @@
     </div>
 </div>
 
-{{-- JavaScript --}}
 <script>
+    const amountInput = document.getElementById('amount');
     const reviewBtn = document.getElementById('reviewRepaymentBtn');
 
-    reviewBtn.addEventListener('click', () => {
-        const client = document.getElementById('loan_id');
-        const amount = document.getElementById('amount').value;
-        const date = document.getElementById('payment_date').value;
-        const note = document.getElementById('note').value;
+    // Add commas as thousands separators dynamically on input
+    amountInput.addEventListener('input', (e) => {
+        // Remove all non-digit and non-dot chars (to allow decimals)
+        let value = e.target.value.replace(/[^0-9.]/g, '');
 
-        let selectedText = client.options[client.selectedIndex]?.text || 'N/A';
+        // Handle multiple dots: keep only first
+        const parts = value.split('.');
+        if (parts.length > 2) {
+            value = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        // Split integer and decimal parts
+        let [intPart, decPart] = value.split('.');
+        // Format integer part with commas
+        intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+        // Rebuild value
+        e.target.value = decPart !== undefined ? intPart + '.' + decPart : intPart;
+    });
+
+    reviewBtn.addEventListener('click', () => {
+        const clientSelect = document.getElementById('loan_id');
+        let amount = amountInput.value.trim();
+        const dateInput = document.getElementById('payment_date');
+        const noteInput = document.getElementById('note');
+
+        // Remove commas from amount for validation & submission
+        const cleanAmount = amount.replace(/,/g, '');
+
+        if (!clientSelect.value) {
+            alert('Please select a client.');
+            clientSelect.focus();
+            return;
+        }
+
+        if (!cleanAmount || isNaN(cleanAmount) || Number(cleanAmount) <= 0) {
+            alert('Please enter a valid amount.');
+            amountInput.focus();
+            return;
+        }
+
+        if (!dateInput.value) {
+            alert('Please select a payment date.');
+            dateInput.focus();
+            return;
+        }
+
+        let selectedText = clientSelect.options[clientSelect.selectedIndex].text;
 
         const reviewContent = document.getElementById('repaymentReviewContent');
         reviewContent.innerHTML = `
             <p><strong>Client:</strong> ${selectedText}</p>
             <p><strong>Amount Paid:</strong> UGX ${amount}</p>
-            <p><strong>Payment Date:</strong> ${date}</p>
-            <p><strong>Note:</strong> ${note || '-'}</p>
+            <p><strong>Payment Date:</strong> ${dateInput.value}</p>
+            <p><strong>Note:</strong> ${noteInput.value.trim() ? noteInput.value.trim() : '-'}</p>
         `;
 
         document.getElementById('repaymentReviewModal').classList.remove('hidden');
@@ -112,7 +154,10 @@
     }
 
     function confirmRepaymentSubmission() {
+        // Before submit, remove commas from amount input value
+        amountInput.value = amountInput.value.replace(/,/g, '');
         document.getElementById('repaymentForm').submit();
     }
 </script>
+
 @endsection

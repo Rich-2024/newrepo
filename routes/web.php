@@ -26,6 +26,9 @@ use App\Http\Controllers\LoanController;
 Route::middleware(['auth', 'check.trial'])->group(function () {
     Route::get('/dashboard/view', [LogicController::class, 'view'])->name('view.dash');
 });
+    Route::put('/repayment/{repayment}', [RepaymentController::class, 'update'])->name('repayments.update');
+
+Route::get('/loans/{loan}/his', [ClientController::class, 'editHistory'])->name('loanss.history');
 
 // Route::middleware('auth', 'admin')->group(function () {
 
@@ -89,10 +92,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/loan-fines/update-settings', [LoanFineController::class, 'updateSettings'])->name('loan_fines.update_settings');
     Route::get('/loan-fines/table', [LoanFineController::class, 'table'])->name('loan_fines.table');
     Route::get('/fine-loans/table', [LoanFineController::class, 'fineLoansTable'])->name('fine_loans.table');
- Route::get('/Repay', [RepaymentController::class, 'show'])->name('settled');
+ Route::get('/Repay', [RepaymentController::class, 'showSettledRepayments'])->name('settled');
 Route::get('/repayments/{id}/print', [RepaymentController::class, 'printsettled'])
     ->name('repayments.print')
     ->middleware('auth');
+Route::get('/repayments/{repayment}/logs', [\App\Http\Controllers\RepaymentController::class, 'viewLogs'])
+    ->name('repayments.logs')
+    ->middleware('auth');
+Route::put('/repayment/{repayment}', [ReportController::class, 'update'])->name('repayment.update');
+
  Route::get('/settledLoan/{id}/settledLoan', [RepaymentController::class, 'printsettled'])->name('repayments.prints');
 
 Route::get('/archived-settled-loans', [ArchivedSettledLoanController::class, 'index'])->name('archived_settled_loans.index');

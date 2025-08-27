@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\RepaymentEditLog;
 use App\Models\Loan;
 use App\Models\Repayment;
 use App\Models\SettledLoan;
@@ -297,6 +297,62 @@ public function destroy($id)
 
     return redirect()->route('settled_loans.index')->with('success', 'Settled loan archived successfully.');
 }
+// public function show()
+// {
 
+//     $repayment = SettledRepayment::all();
+//     return view('defau', compact('repayment'));
+// }
+public function update(Request $request, Repayment $repayment)
+{
+    $validated = $request->validate([
+        'amount' => 'required|numeric|min:0',
+        'payment_date' => 'required|date',
+        'note' => 'nullable|string|max:255',
+    ]);
+
+    $repayment->update($validated);
+
+    return redirect()->route('reports.repayments')->with('success', 'Repayment updated successfully.');
+}
+public function showSettledRepayments(Request $request)
+{
+    $userId = Auth::id();
+
+    $month = $request->get('month', now()->month);
+    $year  = $request->get('year', now()->year);
+
+    $repayments = SettledRepayment::with('settledLoan')
+        ->whereHas('settledLoan', fn($query) => $query->where('user_id', $userId))
+        ->whereMonth('payment_date', $month)
+        ->whereYear('payment_date', $year)
+        ->orderByDesc('payment_date')
+        ->get();
+
+    $reportData = [
+        'repayments'   => $repayments,
+        'total_loans'  => SettledLoan::where('user_id', $userId)->sum('amount_copy'),
+        'balance_due'  => SettledLoan::where('user_id', $userId)->sum('balance_left'),
+    ];
+
+    return view('clients.overdue', [
+        'reportData' => $reportData,
+        'month'      => $month,
+        'year'       => $year,
+    ]);
+}
+
+
+public function viewLogs(SettledRepayment $repayment)
+{
+    // Ensure the user owns the repayment
+    if ($repayment->loan?->user_id !== auth()->id()) {
+        abort(403, 'Unauthorized');
+    }
+
+    $logs = $repayment->editLogs()->with('editor')->latest()->get();
+
+    return view('repayments.logs', compact('repayment', 'logs'));
+}
 
 }

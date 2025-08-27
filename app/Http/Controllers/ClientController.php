@@ -11,6 +11,7 @@ use App\Models\InterestSetup;
 use App\Models\SettledLoan;
 use Carbon\Carbon;
 use App\Models\CopyLoan;
+use App\Models\LoanEditLog;
 
 
 class ClientController extends Controller
@@ -236,17 +237,64 @@ private function updateLoanStatusIfExpired()
 public function update(Request $request, $id)
 {
     $validated = $request->validate([
-        'name'   => 'required|string|max:255',
-        'phone'  => 'required|string|max:20',
+        'name'      => 'required|string|max:255',
+        'contact'   => 'required|string|max:20',
+        'amount'    => 'required|numeric|min:1000',
+        'edit_note' => 'required|string|max:500',
     ]);
 
     $loan = Loan::findOrFail($id);
+    $before = $loan->toArray();
 
-    $loan->name = $validated['name'];
-    $loan->contact = $validated['phone'];
+    $loan->name    = $validated['name'];
+    $loan->contact = $validated['contact'];
+    $loan->amount  = $validated['amount'];
+
+    $interest = InterestSetup::latest()->first();
+    if (!$interest) {
+        return redirect()->back()->with('error', 'Interest setup not configured.');
+    }
+
+    $rate = $interest->interest_rate;
+    $duration = $interest->loan_duration;
+
+    $interestAmount = ($rate / 100) * $loan->amount;
+    $totalToPay     = $loan->amount + $interestAmount;
+    $dailyRepayment = $totalToPay / $duration;
+
+    $loan->interest_rate   = $rate;
+    $loan->loan_duration   = $duration;
+    $loan->total_amount    = round($totalToPay, 2);
+    $loan->balance_to_pay  = round($totalToPay, 2);
+    $loan->daily_repayment = round($dailyRepayment, 2);
+
+    if ($loan->loan_date) {
+        $loan->End_date = Carbon::parse($loan->loan_date)->addDays($duration)->toDateString();
+    }
+
     $loan->save();
 
-    return redirect()->back()->with('success', 'Client information updated successfully.');
+    LoanEditLog::create([
+        'loan_id'        => $loan->id,
+        'edited_by'      => Auth::id(),
+        'note'           => $validated['edit_note'],
+        'before_changes' => json_encode($before),
+        'after_changes'  => json_encode($loan->fresh()->toArray()),
+    ]);
+
+    return redirect()->back()->with('success', 'Loan updated and changes logged.');
+
 }
+public function editHistory($loanId)
+{
+    $loan = Loan::findOrFail($loanId);
+
+    $editLogs = \App\Models\LoanEditLog::where('loan_id', $loanId)
+        ->with('editor')
+        ->latest()
+        ->get();
+
+    return view('business.history', compact('loan', 'editLogs'));
 }
 
+}

@@ -1,0 +1,32 @@
+name: Deploy Laravel App to InfinityFree via FTP
+
+on:
+  push:
+    branches:
+      - main  # or master, depending on your default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🧹 Remove Unneeded Files
+        run: |
+          rm -rf .git .github tests node_modules
+
+      - name: 📦 Install Composer Dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: 🚀 Upload via FTP to InfinityFree
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./ # or ./public if you moved Laravel's public folder contents to root
+          server-dir: /FinancialHubMgt.great-site.net/htdocs/
+timeout: 86400000
+log-level: standard

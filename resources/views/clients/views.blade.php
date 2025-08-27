@@ -149,26 +149,76 @@
 <div id="editModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg w-full sm:w-96 max-w-full">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Edit Client Details</h3>
-        <form id="editForm" method="POST" action=""> {{-- FIXED: action is set via JS --}}
-            @csrf
-            @method('PUT')
-            <input type="hidden" name="loan_id" id="loan_id" />
+<form id="editForm" method="POST" action="">
+    @csrf
+    @method('PUT')
+    <input type="hidden" name="loan_id" id="loan_id" />
 
-            <div class="mb-4">
-                <label for="client_name" class="block text-sm font-medium text-gray-700">Client Name</label>
-                <input type="text" name="name" id="client_name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required />
-            </div>
+    <div class="mb-4">
+        <label for="client_name" class="block text-sm font-medium text-gray-700">Client Name</label>
+        <input type="text" name="name" id="client_name"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+               required />
+    </div>
 
-            <div class="mb-4">
-                <label for="client_phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                <input type="text" name="phone" id="client_phone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required />
-            </div>
+    <div class="mb-4">
+        <label for="client_phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+        <input type="text" name="contact" id="client_phone"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+               required />
+    </div>
 
-            <div class="flex justify-end gap-2">
-                <button type="button" class="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Save</button>
-            </div>
-        </form>
+    <div class="mb-4">
+        <label for="loan_amount" class="block text-sm font-medium text-gray-700">Loan Amount (UGX)</label>
+        <input type="text" id="formatted_amount"
+               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+               required />
+        {{-- Hidden input to hold raw numeric value --}}
+        <input type="hidden" name="amount" id="loan_amount" />
+    </div>
+
+    <div class="mb-4">
+        <label for="edit_note" class="block text-sm font-medium text-gray-700">Reason for Edit</label>
+        <textarea name="edit_note" id="edit_note" rows="3"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="E.g. Client requested correction to amount"
+                  required></textarea>
+    </div>
+
+    <div class="flex justify-end gap-2">
+        <button type="button" class="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Save</button>
+    </div>
+</form>
+
+<script>
+    const formattedInput = document.getElementById('formatted_amount');
+    const hiddenInput = document.getElementById('loan_amount');
+
+    formattedInput.addEventListener('input', function () {
+        let rawValue = this.value.replace(/,/g, '');
+        // Remove any non-digit characters (optional, keep numbers only)
+        rawValue = rawValue.replace(/[^\d]/g, '');
+
+        if (rawValue === '') {
+            hiddenInput.value = '';
+            this.value = '';
+            return;
+        }
+
+        // Format number with commas
+        const formatted = Number(rawValue).toLocaleString('en-US');
+        this.value = formatted;
+
+        // Store raw numeric value in hidden input
+        hiddenInput.value = rawValue;
+    });
+
+    // Optional: if you want to load an initial value with commas on page load,
+    // you can do that here by setting formattedInput.value and hiddenInput.value accordingly
+</script>
+
+
     </div>
 </div>
 
@@ -182,7 +232,7 @@
         document.getElementById('client_phone').value = clientContact;
 
         const form = document.getElementById('editForm');
-        form.action = `/clients/${clientId}`; // ✅ Set action dynamically
+        form.action = `/clients/${clientId}`; 
 
         const modal = document.getElementById('editModal');
         modal.classList.remove('hidden');

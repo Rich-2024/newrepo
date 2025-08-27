@@ -26,5 +26,9 @@ class SettledLoan extends Model
 {
     return $this->hasMany(SettledRepayment::class);
 }
+public function loan()
+{
+    return $this->belongsTo(SettledLoan::class, 'settled_loan_id');
+}
 
 }

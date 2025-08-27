@@ -39,7 +39,7 @@
             <thead class="bg-blue-50 text-gray-700 uppercase text-xs">
                 <tr>
                     <th class="px-6 py-4 text-left">Client Name</th>
-                    <th class="px-6 py-4 text-left">Loan Amount</th>
+                    <th class="px-6 py-4 text-left">Intial Loan Amount</th>
                     <th class="px-6 py-4 text-left">Issued On</th>
                     <th class="px-6 py-4 text-left">Ends On</th>
                     <th class="px-6 py-4 text-left">Actions</th>
@@ -57,6 +57,11 @@
                                class="text-green-600 hover:underline font-medium">Upload</a>
                             <a href="{{ route('attachments.view', $loan->id) }}"
                                class="text-yellow-600 hover:underline font-medium">View</a>
+                        <a href="{{ route('loanss.history', $loan->id) }}"
+   class="text-yellow-600 hover:underline font-medium">
+   Edit info
+</a>
+
                         </td>
                     </tr>
                 @empty

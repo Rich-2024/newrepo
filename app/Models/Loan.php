@@ -32,6 +32,11 @@ class Loan extends Model
 {
     return $this->hasMany(Attachment::class);
 }
+public function editLogs()
+{
+    return $this->hasMany(LoanEditLog::class);
+}
+
 public function user()
 {
     return $this->belongsTo(User::class);

@@ -21,7 +21,7 @@
         </div>
 
         <div class="p-6 bg-yellow-50 rounded-lg shadow text-center">
-            <h3 class="text-lg font-semibold text-yellow-700 mb-3 uppercase tracking-wide">Expected Revenue-Active</h3>
+            <h3 class="text-lg font-semibold text-yellow-700 mb-3 uppercase tracking-wide">Balance To Be collected-Active</h3>
             <p class="text-4xl font-extrabold text-yellow-900">UGX {{ number_format($loanStats->total_balance_to_pay, 2) }}</p>
         </div>
 
@@ -32,7 +32,7 @@
         <p class="text-4xl font-extrabold text-blue-900">UGX {{ number_format($totalRepayments, 2) }}</p>
     </div>
 
-<section class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md mb-12 border border-gray-200">
+{{-- <section class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md mb-12 border border-gray-200">
     <h3 class="text-2xl font-semibold text-gray-900 mb-6 border-b border-gray-300 pb-3 flex items-center gap-3">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
@@ -61,7 +61,7 @@
 
     <dl class="grid grid-cols-1 md:grid-cols-4 gap-6 text-gray-700 text-lg font-medium">
         <div>
-            <dt class="uppercase tracking-wide text-gray-600 mb-1">Expected Revenue</dt>
+            <dt class="uppercase tracking-wide text-gray-600 mb-1"> Balance to be Collected</dt>
             <dd class="text-blue-700 font-bold">UGX {{ number_format($expectedRevenue, 2) }}</dd>
         </div>
         <div>
@@ -77,7 +77,7 @@
             <dd class="text-purple-700 font-extrabold text-xl">UGX {{ number_format($expectedProfit, 2) }}</dd>
         </div>
     </dl>
-</section>
+</section> --}}
 
 
    @php
