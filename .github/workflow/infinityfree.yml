@@ -1,0 +1,24 @@
+name: Deploy Laravel App to FinancialHubMgt.great-site.net
+
+on:
+  push:
+    branches:
+      - laravel_Branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Get latest code
+        uses: actions/checkout@v4
+
+      - name: 📦 Sync files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.3.4
+        with:
+          server: ftp.upload.net
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /FinancialHubMgt.great-site.net/htdocs/
+          timeout: 300 # seconds
+          log-level: standard
