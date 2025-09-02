@@ -1,4 +1,4 @@
-name: Deploy Laravel App to FinancialHubMgt.great-site.net
+name: Deploy Laravel App to LoanSystem.great-site.net
 
 on:
   push:
@@ -19,6 +19,6 @@ jobs:
           server: ftp.upload.net
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /FinancialHubMgt.great-site.net/htdocs/
+          server-dir: /LoanSystem.great-site.net/htdocs/
           timeout: 86400         # 24 hours in seconds
           log-level: standard
