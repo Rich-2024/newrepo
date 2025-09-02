@@ -19,6 +19,6 @@ jobs:
           server: ftp.upload.net
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /FinancialHubMgt.great-site.net/htdocs/
+          server-dir: /htdocs/
           timeout: 86400         # 24 hours in seconds
           log-level: standard
