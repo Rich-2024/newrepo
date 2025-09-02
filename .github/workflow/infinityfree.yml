@@ -1,4 +1,4 @@
-name: Deploy Laravel App to LoanSystem.great-site.net
+=name: Deploy Laravel App to LoanSystem.great-site.net
 
 on:
   push:
