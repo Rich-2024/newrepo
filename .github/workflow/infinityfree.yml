@@ -1,4 +1,4 @@
-=name: Deploy Laravel App to LoanSystem.great-site.net
+name: Deploy Laravel App to LoanSystem.great-site.net
 
 on:
   push:
@@ -16,9 +16,9 @@ jobs:
       - name: 📦 Sync files via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp.upload.net
+          server: ftpupload.net
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /htdocs/
-          timeout: 86400         # 24 hours in seconds
+          server-dir: /LoanSystem.great-site.net/htdocs/
+          timeout: 86400
           log-level: standard
